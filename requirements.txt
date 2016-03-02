@@ -1,0 +1,9 @@
+Pillow
+scrapy
+redis
+requests
+pymongo
+pytz
+scrapyd
+scrapyd-client
+flask
