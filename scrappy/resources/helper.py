@@ -26,6 +26,13 @@ class ResourceHelper():
         this_file = inspect.getfile(inspect.currentframe())
         return os.path.abspath(os.path.dirname(this_file))
 
+    def isExist(self, path):
+        return os.path.exists(path)
+
+    def make(self, path):
+        if os.path.isdir(path):
+            os.makedirs(path)
+
     def loadJson(self, resourceName):
         with open(self.path + os.path.sep + resourceName, 'r')as f:
             data = json.load(f)
@@ -40,6 +47,16 @@ class ResourceHelper():
 
     def get(self, key, resourceData):
         return resourceData[key]
+
+    def write(self, resourceName, content):
+        with open(self.path + os.path.sep + resourceName, 'w')as f:
+            f.write(content)
+        f.close
+
+    def append(self, resourceName, content):
+        with open(self.path + os.path.sep + resourceName, 'a')as f:
+            f.write(content)
+        f.close
 
 
 if __name__ == '__main__':

@@ -2,7 +2,7 @@
 __author__ = 'modm'
 import datetime, time, re, pytz
 
-timezone = pytz.timezone('Asia/Shanghai')
+timezone = pytz.timezone('Asia/Shanghai') #set your timezone
 DATE_RE = re.compile('(\d+年(\d+月)*(\d+日)*|\d+-\d+(-\d+)*)\s*(\d+:\d+:\d+)*')
 
 

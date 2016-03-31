@@ -70,6 +70,7 @@ AUTOTHROTTLE_DEBUG = False
 extensions
 '''
 ##redis
+##redis
 ENABLE_REDIS = False
 if ENABLE_REDIS:
     SCHEDULER = "scrappy.extensions.scrapy_redis.scheduler.Scheduler"
@@ -90,12 +91,12 @@ JSONRPC_PORT = None
 '''
 custom settings
 '''
-LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'DEBUG'
 
 REDIS_URL = 'redis://localhost:6379'
 JSONRPC_HOST = 'localhost'
 # resource absolute direction
-RESOURCE_DIR = "/Users/modm/scrappy/scrappy/resources"
+RESOURCE_DIR = "/Users/modm/github/scrappy/scrappy/resources"
 # MYSQl
 MYSQL_HOST = '127.0.0.1'
 MYSQL_PORT = 3306

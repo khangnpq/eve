@@ -11,8 +11,7 @@ import logging
 class ScrappyPipeline(object):
     def __init__(self):
         self.mongoDict = {}
-        self.collection_name_map = {'ScrappyItem': "scrappy"
-                                    }
+        self.collection_name_map = {'ScrappyItem': "scrappy"}  #model class name to mongoDB collection
 
     def _getMongoInstance(self, item):
         itemClassName = item.__class__.__name__

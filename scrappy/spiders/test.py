@@ -2,6 +2,7 @@
 __author__ = 'modm'
 from scrapy import Request
 from scrapy.spiders import CrawlSpider
+from scrappy.extensions.scrapy_redis.spiders.RedisSpider import RedisSpider
 
 
 class TestSpider(CrawlSpider):
