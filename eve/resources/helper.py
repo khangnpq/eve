@@ -1,14 +1,11 @@
 # coding:utf8
-__author__ = 'modm'
 import json
 import os
-
 try:
-    from scrapy.settings import Settings
-    from scrapy.utils import project
+    from eve.settings import Settings
+    from eve.utils import project
 except:
     pass
-
 
 class ResourceHelper():
     def __init__(self):
@@ -60,4 +57,4 @@ class ResourceHelper():
 
 
 if __name__ == '__main__':
-    print ResourceHelper().loadJson("useragent.json")
+    print(ResourceHelper().loadJson("useragent.json"))

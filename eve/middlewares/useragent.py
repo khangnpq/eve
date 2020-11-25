@@ -1,7 +1,7 @@
 # coding:utf8
-__author__ = 'modm'
-from scrappy.resources.helper import ResourceHelper
 import random
+from eve.resources.helper import ResourceHelper
+
 class UserAgentMiddleware(object):
     def __init__(self):
         self.resourceHelper = ResourceHelper()

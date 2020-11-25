@@ -1,9 +1,11 @@
 # coding:utf8
-__author__ = 'modm'
-import datetime, time, re, pytz
+import datetime
+import time
+import re
+import pytz
 
-timezone = pytz.timezone('Asia/Shanghai') #set your timezone
-DATE_RE = re.compile('(\d+年(\d+月)*(\d+日)*|\d+-\d+(-\d+)*)\s*(\d+:\d+:\d+)*')
+timezone = pytz.timezone('Asia/Saigon') #set your timezone
+DATE_RE = re.compile('\d+-\d+-\d+)(\s\d+:\d+:\d+)*|(\d+\/\d+\/\d+')
 
 
 def getCurrentDateStr(date_type=False, datetime_type=True):
@@ -31,8 +33,8 @@ def parseDateString(dateStr):
         dateStr = mDate.group()
     else:
         return None
-    dateStr = dateStr.strip().split(".")[0]
-    dateStr = dateStr.replace('年', '-').replace('月', '-').replace('日', '')
+    # dateStr = dateStr.strip().split(".")[0]
+    # dateStr = dateStr.replace('年', '-').replace('月', '-').replace('日', '')
     if len(dateStr) <= 5 and len(dateStr) >= 4:
         if dateStr[-1] == '-':
             dateStr += '01-01'

@@ -1,5 +1,5 @@
 # coding:utf8
-__author__ = 'modm'
+
 class RemoveCookieMiddleware(object):
     def process_request(self, request, spider):
         request.cookies = {}

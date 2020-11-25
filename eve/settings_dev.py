@@ -1,10 +1,11 @@
-BOT_NAME = 'github.com/dormymo/scrappy'
-SPIDER_MODULES = ['scrappy.spiders']
-NEWSPIDER_MODULE = 'scrappy.spiders'
+# BOT_NAME = 'github.com/dormymo/eve'
+SPIDER_MODULES = ['eve.spiders']
+NEWSPIDER_MODULE = 'eve.spiders'
+ROBOTSTXT_OBEY = False
 LOG_FORMAT = '%(asctime)s [%(name)s] %(levelname)s: %(message)s'
-USER_AGENT = 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2049.0 Safari/537.36'
+#USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 Edg/86.0.622.69'
 RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 408]
-RETRY_TIMES = 20
+RETRY_TIMES = 2
 # DOWNLOAD_DELAY=0.25
 DOWNLOAD_TIMEOUT = 60
 CONCURRENT_REQUESTS = 16
@@ -41,18 +42,19 @@ Default :
 '''
 
 DOWNLOADER_MIDDLEWARES = {
-    # 'scrappy.middlewares.cookie.RemoveCookieMiddleware': 690,
-    # 'scrappy.middlewares.proxy.RandomProxyMiddleware': 760,
-    'scrappy.middlewares.useragent.UserAgentMiddleware': 390,
+    'eve.middlewares.cookie.RemoveCookieMiddleware': 690,
+    # 'eve.middlewares.proxy.RandomProxyMiddleware': 760,
+    # 'eve.middlewares.useragent.UserAgentMiddleware': 390,
 
 }
-EXTENSIONS = {
-    'scrapy.telnet.TelnetConsole': None,
-    'scrapy.extensions.feedexport.FeedExporter': None,
-    'scrappy.extensions.scrapy_jsonrpc.webservice.WebService': 100
-}
+# EXTENSIONS = {
+#     'scrapy.telnet.TelnetConsole': None,
+#     'scrapy.extensions.feedexport.FeedExporter': None,
+#     'eve.extensions.scrapy_jsonrpc.webservice.WebService': 100
+# }
 ITEM_PIPELINES = {
-    'scrappy.pipelines.ScrappyPipeline': 300
+    # 'eve.pipelines.ScrappyPipeline': 300
+    'eve.pipelines.DefaultValuesPipeline': 50
 }
 AUTOTHROTTLE_ENABLED = False
 AUTOTHROTTLE_START_DELAY = 1
@@ -71,37 +73,37 @@ extensions
 '''
 ##redis
 ##redis
-ENABLE_REDIS = False
-if ENABLE_REDIS:
-    SCHEDULER = "scrappy.extensions.scrapy_redis.scheduler.Scheduler"
-    # Don't cleanup redis queues, allows to pause/resume crawls.
-    SCHEDULER_PERSIST = True
-    # Schedule requests using a priority queue. (default)
-    SCHEDULER_QUEUE_CLASS = 'scrappy.extensions.scrapy_redis.queue.SpiderPriorityQueue'
-    # # Max idle time to prevent the spider from being closed when distributed crawling.
-    # This only works if queue class is SpiderQueue or SpiderStack,
-    # and may also block the same time when your spider start at the first time (because the queue is empty).
-    SCHEDULER_IDLE_BEFORE_CLOSE = 10
-    ##stats
-    STATS_CLASS = 'scrappy.extensions.stat.statcollection.RedisStatsCollector'
+# ENABLE_REDIS = False
+# if ENABLE_REDIS:
+#     SCHEDULER = "eve.extensions.scrapy_redis.scheduler.Scheduler"
+#     # Don't cleanup redis queues, allows to pause/resume crawls.
+#     SCHEDULER_PERSIST = True
+#     # Schedule requests using a priority queue. (default)
+#     SCHEDULER_QUEUE_CLASS = 'eve.extensions.scrapy_redis.queue.SpiderPriorityQueue'
+#     # # Max idle time to prevent the spider from being closed when distributed crawling.
+#     # This only works if queue class is SpiderQueue or SpiderStack,
+#     # and may also block the same time when your spider start at the first time (because the queue is empty).
+#     SCHEDULER_IDLE_BEFORE_CLOSE = 10
+#     ##stats
+#     STATS_CLASS = 'eve.extensions.stat.statcollection.RedisStatsCollector'
 
-JSONRPC_ENABLED = True
-JSONRPC_PORT = None
+# JSONRPC_ENABLED = True
+# JSONRPC_PORT = None
 
 '''
 custom settings
 '''
-LOG_LEVEL = 'DEBUG'
+# LOG_LEVEL = 'DEBUG'
 
-REDIS_URL = 'redis://localhost:6379'
-JSONRPC_HOST = 'localhost'
-# resource absolute direction
-RESOURCE_DIR = "/Users/modm/github/scrappy/scrappy/resources"
-# MYSQl
-MYSQL_HOST = '127.0.0.1'
-MYSQL_PORT = 3306
-MYSQL_USER = 'root'
-MYSQL_PASSWD = '123456'
-MYSQL_DB = 'test'
+# REDIS_URL = 'redis://localhost:6379'
+# JSONRPC_HOST = 'localhost'
+# # resource absolute direction
+RESOURCE_DIR = "/home/khangnpq/Projects/eve/eve/resources"
+# POSTGRESQL
+POSTGRESQL_HOST = '13.229.120.17'
+POSTGRESQL_PORT = '35432'
+POSTGRESQL_USER = 'crawlist'
+POSTGRESQL_PASSWD = 'LsHkQFvQshjH6xD6'
+POSTGRESQL_DB = 'postgres'
 # Mongo
-MONGO_URL = 'mongodb://user:password@localhost/db_name?authMechanism=SCRAM-SHA-1'
+# MONGO_URL = 'mongodb://user:password@localhost/db_name?authMechanism=SCRAM-SHA-1'
