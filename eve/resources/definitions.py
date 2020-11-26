@@ -1,7 +1,7 @@
 # coding:utf8
 import sys
-# insert at 1, 0 is the script path (or '' in REPL)
-sys.path.insert(1, '/home/khangnpq/Projects/eve/eve/scripts')
+path = '/'.join(__file__.split('/')[:-2])
+sys.path.insert(1, path +'/scripts')
 from scripts import generate_spider_setting
 
 tokopedia_search_query = """query SearchProductQuery($params: String) 
