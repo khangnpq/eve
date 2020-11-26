@@ -101,6 +101,7 @@ def generate_request_arguments(url, spider_setting, parse_page, err_parse):
     payload = request_setting.get('payload', '')
     current_page = url.get('page')
     meta = {'url_type': url_type,
+            'project': url.get('project'),
             'worker_type': worker_type,
             'page': current_page} 
     request_url = url.get('url')
@@ -131,3 +132,15 @@ def generate_request_arguments(url, spider_setting, parse_page, err_parse):
     # meta['request'] = request
     # request[6] = meta
     return request
+
+def generate_spider_setting(SETTING, PROJECT, site):
+    SETTING['allowed_domains'] = SETTING['allowed_domains'][0].format(PROJECT[site])
+    SETTING['start_urls'] = SETTING['start_urls'][0].format(PROJECT[site])
+    SETTING['headers']['referer'] = SETTING['headers']['referer'].format(PROJECT[site])
+    if site == 'tokopedia':
+        venture = 'id'
+    else:
+        venture = PROJECT[site].split('.')[-1] #lazada.vn -> vn, lazada.co.id -> id
+    SETTING['venture'] = venture
+    SETTING['db'] = PROJECT['db']
+    return SETTING

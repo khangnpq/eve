@@ -1,7 +1,7 @@
 # coding:utf8
 from bitk import PostgreSQLConnector
 try:
-    from eve.utils import project
+    from scrapy.utils import project
 except:
     pass
 class PostgreSQLClient(object):

@@ -25,7 +25,7 @@ class EveSpider(scrapy.Spider):
         # data = json.loads(data.text) 
         # urls_list = data["urls"]
 
-        urls_list = [   
+        # urls_list = [   
                     # TOKOPEDIA CATEGORY
                     # {
                     # "url": 'https://gql.tokopedia.com/',
@@ -33,26 +33,29 @@ class EveSpider(scrapy.Spider):
                     # 'sc': 65,
                     # 'row': 60,
                     # 'page': 1,
+                    # 'project': 'xmi'
                     # },
-                     # LAZADA CATEGORY PAGE 
+                    # LAZADA CATEGORY PAGE 
                     # {
                     # "url": "https://www.lazada.co.id/beli-handphone/?page=1",
                     # "url_type": "lazada_category",
                     # "page": 1,
-                    # "venture": "id"
+                    # "venture": "id",
+                    # "project": "xmi"
                     # },
                     # SHOPEE CATEGORY PAGE 
-                    {
-                    "url": 'https://shopee.co.id/api/v2/search_items/?by=relevancy&limit=50&match_id=1211&newest=0&order=desc&page_type=search&version=2',
-                    "url_type": 'shopee_category',
-                    "cat_id": 1211, 
-                    "page": 1, 
-                    "venture": "id"
-                    }
-                    ]
+                    # {
+                    # "url": 'https://shopee.co.id/api/v2/search_items/?by=relevancy&limit=50&match_id=1211&newest=0&order=desc&page_type=search&version=2',
+                    # "url_type": 'shopee_category',
+                    # "cat_id": 1211, 
+                    # "page": 1, 
+                    # "project": 'xmi'
+                    # }
+                    # ]
         for url in urls_list:
             platform = url.get('url_type').split('_')[0]
-            spider_setting = SPIDER_SETTING[platform]
+            project = url.get('project')
+            spider_setting = SPIDER_SETTING[project][platform]
 
             self.allowed_domains = spider_setting['allowed_domains']
             self.start_urls = spider_setting['start_urls']
@@ -67,7 +70,7 @@ class EveSpider(scrapy.Spider):
         except:
             data = response.text 
 
-        products_data = generate_item_class(response.meta.get('url_type'), template=Products)
+        products_data = generate_item_class(response.meta.get('project') + '_' + response.meta.get('url_type'), template=Products)
         products_data['info'] = data
         if response.meta.get('page'):
             products_data['page'] = response.meta.get('page')
@@ -98,7 +101,7 @@ class EveSpider(scrapy.Spider):
 
         # created_at = datetime.now()
         # platform = failed_url[failed_url.find('//')+2:failed_url.find('.')]
-        error_data = generate_item_class(name=response.meta.get('url_type'), template=ErrorInfo)
+        error_data = generate_item_class(name=response.meta.get('project') + '_' + response.meta.get('url_type'), template=ErrorInfo)
         error_data['failed_url'] = failed_url
         error_data['failed_status'] = failed_status
 

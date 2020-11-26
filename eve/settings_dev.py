@@ -53,7 +53,7 @@ DOWNLOADER_MIDDLEWARES = {
 #     'eve.extensions.scrapy_jsonrpc.webservice.WebService': 100
 # }
 ITEM_PIPELINES = {
-    # 'eve.pipelines.ScrappyPipeline': 300
+    'eve.pipelines.EvePipeline': 300,
     'eve.pipelines.DefaultValuesPipeline': 50
 }
 AUTOTHROTTLE_ENABLED = False
