@@ -28,7 +28,7 @@ class EveSpider(scrapy.Spider):
             file.close() 
         worker_manager = "http://13.212.181.246:5000/getdata?project=fcv_q&num=100"
         worker_manager_low = "http://13.212.181.246:5000/getdata?project=xmi_ql&num=100"
-
+        urls_list = []
         # data = requests.get(worker_manager)
         # data = json.loads(data.text) 
         # urls_list = data["urls"]
