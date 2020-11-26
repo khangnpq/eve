@@ -10,6 +10,7 @@ from scrapy.spidermiddlewares.httperror import HttpError
 from twisted.internet.error import DNSLookupError
 from twisted.internet.error import TimeoutError, TCPTimedOutError
 import os
+import requests
 
 class EveSpider(scrapy.Spider):
     # spider name
