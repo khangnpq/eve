@@ -33,7 +33,8 @@ class EvePipeline(object):
                 self.data[db_name] = {}
             if table_name not in self.data[db_name].keys():
                 self.data[db_name][table_name] = []
-            self.data[db_name][table_name].append(info)
+            if info not in self.data[db_name][table_name]:
+                self.data[db_name][table_name].append(info)
             new_data = copy.deepcopy(self.data)
             for db in new_data.keys():
                 for table in new_data[db].keys():    
