@@ -9,10 +9,12 @@ from eve.resources.definitions import *
 from scrapy.spidermiddlewares.httperror import HttpError
 from twisted.internet.error import DNSLookupError
 from twisted.internet.error import TimeoutError, TCPTimedOutError
+import os
 
 class EveSpider(scrapy.Spider):
     # spider name
     name = 'eve'
+    block_flag = False 
     def __init__(self, category=None, *args, **kwargs):
         super(EveSpider, self).__init__(*args, **kwargs)
 
