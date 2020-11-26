@@ -18,23 +18,37 @@ class EveSpider(scrapy.Spider):
 
     def start_requests(self):
         
-        # worker_manager = "http://13.212.181.246:5000/getdata?project=fcv_q&num=100"
-        # worker_manager_low = "http://13.212.181.246:5000/getdata?project=fcv_ql&num=100"
+        if os.path.exists(str(os.getcwd()) + "/../test.txt"):
+            self.block_flag = True
+            raise scrapy.exceptions.CloseSpider("Current Job not Done yet.")
+        else: 
+            file = open(str(os.getcwd()) + "/../test.txt", "w+")
+            file.close() 
+        worker_manager = "http://13.212.181.246:5000/getdata?project=fcv_q&num=100"
+        worker_manager_low = "http://13.212.181.246:5000/getdata?project=xmi_ql&num=100"
 
         # data = requests.get(worker_manager)
         # data = json.loads(data.text) 
         # urls_list = data["urls"]
 
-        urls_list = [   
+        if len(urls_list) == 0: 
+            data_low = requests.get(worker_manager_low)
+            data_low = json.loads(data_low.text) 
+            urls_list = data_low["urls"]
+
+        if len(urls_list) == 0: 
+            raise scrapy.exceptions.CloseSpider("No Job.")
+
+        # urls_list = [   
                     # TOKOPEDIA CATEGORY
-                    {
-                    "url": 'https://gql.tokopedia.com/',
-                    "url_type": "tokopedia_category",
-                    'sc': 65,
-                    'row': 60,
-                    'page': 1,
-                    'project': 'xmi'
-                    },
+                    # {
+                    # "url": 'https://gql.tokopedia.com/',
+                    # "url_type": "tokopedia_category",
+                    # 'sc': 65,
+                    # 'row': 60,
+                    # 'page': 1,
+                    # 'project': 'xmi'
+                    # },
                     # LAZADA CATEGORY PAGE 
                     # {
                     # "url": "https://www.lazada.co.id/beli-handphone/?page=1",
@@ -51,7 +65,7 @@ class EveSpider(scrapy.Spider):
                     # "page": 1, 
                     # "project": 'xmi'
                     # }
-                    ]
+                    # ]
         for url in urls_list:
             platform = url.get('url_type').split('_')[0]
             project = url.get('project')
@@ -98,13 +112,13 @@ class EveSpider(scrapy.Spider):
             failed_url = request.url
             failed_status = 'TimeoutError'
             self.logger.error('TimeoutError on %s', failed_url)
-
-        # created_at = datetime.now()
-        # platform = failed_url[failed_url.find('//')+2:failed_url.find('.')]
         error_data = generate_item_class(name=response.meta.get('project') + '_' + response.meta.get('url_type'), template=ErrorInfo)
         error_data['failed_url'] = failed_url
         error_data['failed_status'] = failed_status
 
         yield error_data              
         
+    def close(self, reason):  
+        if not self.block_flag:
+            os.remove(str(os.getcwd()) + "/../test.txt") 
             
