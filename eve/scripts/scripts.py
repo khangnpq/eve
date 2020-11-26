@@ -110,7 +110,7 @@ def generate_request_arguments(url, spider_setting, parse_page, err_parse):
         row = url.get('row')
         payload['variables'] = {'params': payload['variables']['params'].format(str(cat_id), 
                                                                                 str(row), 
-                                                                                str(current_page*row+1), 
+                                                                                str((current_page-1)*row+1), 
                                                                                 str(current_page))
                                 }
     elif url_type == 'lazada_category':

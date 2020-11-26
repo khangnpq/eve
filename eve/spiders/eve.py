@@ -49,7 +49,7 @@ class EveSpider(scrapy.Spider):
                     # "url_type": "tokopedia_category",
                     # 'sc': 65,
                     # 'row': 60,
-                    # 'page': 1,
+                    # 'page': 2,
                     # 'project': 'xmi'
                     # },
                     # LAZADA CATEGORY PAGE 
@@ -68,7 +68,7 @@ class EveSpider(scrapy.Spider):
                     # "page": 1, 
                     # "project": 'xmi'
                     # }
-                    # ]
+                    ]
         for url in urls_list:
             platform = url.get('url_type').split('_')[0]
             project = url.get('project')
