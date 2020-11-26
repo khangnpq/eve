@@ -68,7 +68,7 @@ class EveSpider(scrapy.Spider):
                     # "page": 1, 
                     # "project": 'xmi'
                     # }
-                    ]
+                    # ]
         for url in urls_list:
             platform = url.get('url_type').split('_')[0]
             project = url.get('project')
