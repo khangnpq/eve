@@ -21,12 +21,12 @@ class EveSpider(scrapy.Spider):
 
     def start_requests(self):
         
-        # if os.path.exists(str(os.getcwd()) + "/../test.txt"):
-        #     self.block_flag = True
-        #     raise scrapy.exceptions.CloseSpider("Current Job not Done yet.")
-        # else: 
-        #     file = open(str(os.getcwd()) + "/../test.txt", "w+")
-        #     file.close() 
+        if os.path.exists(str(os.getcwd()) + "/../test.txt"):
+            self.block_flag = True
+            raise scrapy.exceptions.CloseSpider("Current Job not Done yet.")
+        else: 
+            file = open(str(os.getcwd()) + "/../test.txt", "w+")
+            file.close() 
         worker_manager = "http://13.212.181.246:5000/getdata?project=fcv_q&num=100"
         worker_manager_low = "http://13.212.181.246:5000/getdata?project=xmi_ql&num=100"
         urls_list = []
