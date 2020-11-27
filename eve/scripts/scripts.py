@@ -33,7 +33,7 @@ def data_to_query(table, data, multi_insert = False, conflict_do_nothing = None)
             for diction in data: 
                 for key, value in list(diction.items()):
                     if key == "data":
-                        values = values + "'" + str(value).replace('"', '').replace("'", '"""') + "'" + ", "
+                        values = values + "'" + str(value).replace("'", '"') + "'" + ", "
                     else:
                         values = values + "'" + str(value)+ "'" + ", "
 
@@ -46,7 +46,25 @@ def data_to_query(table, data, multi_insert = False, conflict_do_nothing = None)
                 query = query + ' ON CONFLICT ({}) DO NOTHING'.format(",".join(conflict_do_nothing)) 
             
         return query 
-
+def escape_list (lis):
+    value = []
+    for val in lis:
+        if type(val) == dict:
+            val = escape_dict(val)
+        elif type(val) == list:
+            val = escape_list(val)
+        else:
+            value.append(val)
+    return value
+def escape_dict(diction):
+    for key, val in diction.items():
+        if type(val) == list:
+            val = escape_list(val)
+        elif type(val) == dict:
+            val = escape_dict(val)
+        elif type(val) == str:
+            diction[key] = str(val).replace("'", "").replace('"', "") 
+    return diction
 def escape(var): 
     string = str(var) 
     string = string.replace('/',  '') 

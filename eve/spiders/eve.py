@@ -49,7 +49,7 @@ class EveSpider(scrapy.Spider):
                     # "url_type": "tokopedia_category",
                     # 'sc': 65,
                     # 'row': 60,
-                    # 'page': 6,
+                    # 'page': 41,
                     # 'project': 'xmi'
                     # },
                     # {
@@ -90,10 +90,9 @@ class EveSpider(scrapy.Spider):
 
     def parse_page(self,response):
         try:
-            data = json.loads(response.text) 
+            data = escape_dict(json.loads(response.text)) 
         except:
             data = response.text 
-        print(data)
         products_data = generate_item_class(response.meta.get('project') + '_' + response.meta.get('url_type'), template=Products)
         products_data['info'] = data
         if response.meta.get('page'):
@@ -131,4 +130,3 @@ class EveSpider(scrapy.Spider):
     def close(self, reason):  
         if not self.block_flag:
             os.remove(str(os.getcwd()) + "/../test.txt") 
-            
