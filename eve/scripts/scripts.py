@@ -1,6 +1,7 @@
 # coding:utf8
 import json
 import re
+import copy
 
 def data_to_query(table, data, multi_insert = False, conflict_do_nothing = None): 
         
@@ -98,7 +99,7 @@ def generate_request_arguments(url, spider_setting, parse_page, err_parse):
     platform = url_type.split('_')[0]
     worker_type = '_'.join(url_type.split('_')[1:])
     request_setting = spider_setting[worker_type]
-    payload = request_setting.get('payload', '')
+    payload = copy.deepcopy(request_setting.get('payload', ''))
     current_page = url.get('page')
     meta = {'url_type': url_type,
             'project': url.get('project'),

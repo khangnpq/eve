@@ -29,11 +29,11 @@ class EvePipeline(object):
         if hasattr(item, 'handleInsert'):
             info = getattr(item, 'handleInsert')(content)
             table_name = content['schema']+'.'+content['table']
-            if db_name not in self.data.keys():
+            if db_name not in self.data:
                 self.data[db_name] = {}
-            if table_name not in self.data[db_name].keys():
+            if table_name not in self.data[db_name]:
                 self.data[db_name][table_name] = []
-            if info not in self.data[db_name][table_name]:
+            if info['data'] not in self.data[db_name][table_name]:
                 self.data[db_name][table_name].append(info)
             new_data = copy.deepcopy(self.data)
             for db in new_data.keys():

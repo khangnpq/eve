@@ -21,12 +21,12 @@ class EveSpider(scrapy.Spider):
 
     def start_requests(self):
         
-        if os.path.exists(str(os.getcwd()) + "/../test.txt"):
-            self.block_flag = True
-            raise scrapy.exceptions.CloseSpider("Current Job not Done yet.")
-        else: 
-            file = open(str(os.getcwd()) + "/../test.txt", "w+")
-            file.close() 
+        # if os.path.exists(str(os.getcwd()) + "/../test.txt"):
+        #     self.block_flag = True
+        #     raise scrapy.exceptions.CloseSpider("Current Job not Done yet.")
+        # else: 
+        #     file = open(str(os.getcwd()) + "/../test.txt", "w+")
+        #     file.close() 
         worker_manager = "http://13.212.181.246:5000/getdata?project=fcv_q&num=100"
         worker_manager_low = "http://13.212.181.246:5000/getdata?project=xmi_ql&num=100"
         urls_list = []
@@ -44,6 +44,14 @@ class EveSpider(scrapy.Spider):
 
         # urls_list = [   
                     # TOKOPEDIA CATEGORY
+                    # {
+                    # "url": 'https://gql.tokopedia.com/',
+                    # "url_type": "tokopedia_category",
+                    # 'sc': 65,
+                    # 'row': 60,
+                    # 'page': 1,
+                    # 'project': 'xmi'
+                    # },
                     # {
                     # "url": 'https://gql.tokopedia.com/',
                     # "url_type": "tokopedia_category",
@@ -78,7 +86,6 @@ class EveSpider(scrapy.Spider):
             self.start_urls = spider_setting['start_urls']
             self.custom_settings = spider_setting.get('custom_settings', '')
             request = generate_request_arguments(url, spider_setting, self.parse_page, self.errback_parse)
-            
             yield scrapy.Request(*request)
 
     def parse_page(self,response):
