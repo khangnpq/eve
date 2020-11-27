@@ -14,7 +14,7 @@ def data_to_query(table, data, multi_insert = False, conflict_do_nothing = None)
                 if key == "data":
                     values = values + "'" + str(value).replace('"', '') + "'" + ", "
                 else:
-                    values = values + "'" + str(value)+ "'" + ", "
+                    values = values + "'" + str(value).replace('"', '')+ "'" + ", "
 
             columns = columns[:-2]
             values = "(" + values[:-2] + ")"
@@ -33,9 +33,9 @@ def data_to_query(table, data, multi_insert = False, conflict_do_nothing = None)
             for diction in data: 
                 for key, value in list(diction.items()):
                     if key == "data":
-                        values = values + "'" + str(value).replace("'", '"') + "'" + ", "
+                        values = values + "'" + str(value).replace('"', '') + "'" + ", "
                     else:
-                        values = values + "'" + str(value)+ "'" + ", "
+                        values = values + "'" + str(value).replace('"', '')+ "'" + ", "
 
                 multi_values = multi_values + "(" + values[:-2] + "), " 
                 values = ""
