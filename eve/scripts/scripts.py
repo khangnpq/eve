@@ -12,7 +12,7 @@ def data_to_query(table, data, multi_insert = False, conflict_do_nothing = None)
                 columns = columns + str(key) + ", "
 
                 if key == "data":
-                    values = values + "'" + str(value) + "'" + ", "
+                    values = values + "'" + str(value).replace('"', '') + "'" + ", "
                 else:
                     values = values + "'" + str(value)+ "'" + ", "
 
