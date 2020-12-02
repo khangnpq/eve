@@ -63,7 +63,7 @@ def escape_dict(diction):
         elif type(val) == dict:
             val = escape_dict(val)
         elif type(val) == str:
-            diction[key] = str(val).replace("'", "").replace('"', "") 
+            diction[key] = str(val).replace("'", "").replace('"', "").replace('\\',  '')
     return diction
 def escape(var): 
     string = str(var) 
@@ -114,15 +114,19 @@ def find_in_obj(obj, condition):
 
 def generate_request_arguments(url, spider_setting, parse_page, err_parse):
     url_type = url.get('url_type')
-    platform = url_type.split('_')[0]
     worker_type = '_'.join(url_type.split('_')[1:])
     request_setting = spider_setting[worker_type]
-    payload = copy.deepcopy(request_setting.get('payload', ''))
-    current_page = url.get('page')
-    meta = {'url_type': url_type,
+    payload = copy.deepcopy(request_setting.get('payload', '')) 
+    meta = {'platform': url_type.split('_')[0],
             'project': url.get('project'),
-            'worker_type': worker_type,
-            'page': current_page} 
+            'worker_type': worker_type} 
+    if url.get('page'):
+        meta['page'] = url.get('page')
+        current_page = url.get('page')
+    
+    if url.get('keyword'):
+        meta['keyword'] = url.get('keyword')
+
     request_url = url.get('url')
     if url_type == 'tokopedia_category':     
         cat_id = url.get('sc')
@@ -132,24 +136,32 @@ def generate_request_arguments(url, spider_setting, parse_page, err_parse):
                                                                                 str((current_page-1)*row+1), 
                                                                                 str(current_page))
                                 }
+    elif url_type == 'tokopedia_search':      
+        row = url.get('row')
+        payload['variables'] = {'params': payload['variables']['params'].format(str(current_page), 
+                                                                                str(url.get('keyword')), 
+                                                                                str(row),
+                                                                                str((current_page-1)*row)), 
+                                                                                
+                                }
     elif url_type == 'lazada_category':
         pass
     elif url_type == 'shopee_category':
         pass
     
-    request =  [request_url,                #url
-                parse_page,                 #callback
-                request_setting['method'],  #method
-                spider_setting['headers'],  #headers
-                json.dumps(payload),        #body
-                None,                       #cookies
-                meta,                       #meta
-                'utf-8',                    #encoding
-                0,                          #priority
-                True,                       #dont_filter
-                err_parse]                  #errback
-    # meta['request'] = request
-    # request[6] = meta
+    request =  {'url': request_url,               
+                'callback': parse_page,                 
+                'method': request_setting['method'],  
+                'headers': spider_setting['headers'], 
+                'body': json.dumps(payload),        
+                'cookies': None,                   
+                'meta': meta,                       
+                'encoding': 'utf-8',                    
+                'priority': 0,                         
+                'dont_filter': True,                      
+                'errback': err_parse}                  
+    meta['request'] = request
+    request['meta'] = meta
     return request
 
 def generate_spider_setting(SETTING, PROJECT, site):

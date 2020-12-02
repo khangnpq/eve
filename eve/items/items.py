@@ -19,6 +19,7 @@ class Products(Template):
     table = scrapy.Field()
     info = scrapy.Field()
     page = scrapy.Field()
+    keyword = scrapy.Field()
     # conflict_do_nothing = scrapy.Field()
 
     def handleInsert(self, item):
@@ -26,9 +27,10 @@ class Products(Template):
                 'venture': item.get('venture'),
                 'platform': item.get('platform'),
                 'created_at': item.get('created_at'),
-                'data': item.get('info'),
-                'page': item.get('page')
+                'data': item.get('info')
                 }
+        if item.get('page'):
+            info['page'] = item.get('page')
         return info
 
     # def handleUpdate(self, item):
