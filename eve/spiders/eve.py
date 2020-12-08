@@ -16,31 +16,31 @@ class EveSpider(scrapy.Spider):
     # spider name
     name = 'eve'
     block_flag = False 
-    def __init__(self, category=None, *args, **kwargs):
+    def __init__(self, category='', *args, **kwargs):
         super(EveSpider, self).__init__(*args, **kwargs)
 
     def start_requests(self):
         
-        # if os.path.exists(str(os.getcwd()) + "/../test.txt"):
-        #     self.block_flag = True
-        #     raise scrapy.exceptions.CloseSpider("Current Job not Done yet.")
-        # else: 
-        #     file = open(str(os.getcwd()) + "/../test.txt", "w+")
-        #     file.close() 
-        worker_manager = "http://13.212.181.246:5000/getdata?project=fcv_q&num=100"
-        worker_manager_low = "http://13.212.181.246:5000/getdata?project=xmi_ql&num=100"
+        if os.path.exists(str(os.getcwd()) + "/../test.txt"):
+            self.block_flag = True
+            raise scrapy.exceptions.CloseSpider("Current Job not Done yet.")
+        else: 
+            file = open(str(os.getcwd()) + "/../test.txt", "w+")
+            file.close() 
+        #"http://13.212.181.246:5000/getdata?project=xmi_q&num=100"
+        worker_manager = self.worker_manager
+        worker_manager_low = self.worker_manager.replace('_q&', '_ql&') 
         urls_list = []
-        # data = requests.get(worker_manager)
-        # data = json.loads(data.text) 
-        # urls_list = data["urls"]
-
+        data = requests.get(worker_manager)
+        data = json.loads(data.text) 
+        urls_list = data["urls"]
         if len(urls_list) == 0: 
             data_low = requests.get(worker_manager_low)
             data_low = json.loads(data_low.text) 
             urls_list = data_low["urls"]
 
-        # if len(urls_list) == 0: 
-        #     raise scrapy.exceptions.CloseSpider("No Job.")
+        if len(urls_list) == 0: 
+            raise scrapy.exceptions.CloseSpider("No Job.")
         # for i in range(1,2):
         #     urls_list.append({
         #             "url": 'https://gql.tokopedia.com/',
@@ -181,5 +181,5 @@ class EveSpider(scrapy.Spider):
         
     def close(self, reason):  
         if not self.block_flag:
-            # os.remove(str(os.getcwd()) + "/../test.txt") 
-            pass
+            os.remove(str(os.getcwd()) + "/../test.txt") 
+            # pass
