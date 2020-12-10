@@ -2,7 +2,10 @@
 SPIDER_MODULES = ['eve.spiders']
 NEWSPIDER_MODULE = 'eve.spiders'
 ROBOTSTXT_OBEY = False
-LOG_FORMAT = '%(asctime)s [%(name)s] %(levelname)s: %(message)s'
+LOG_LEVEL = 'WARNING'
+LOG_STDOUT = True
+LOG_FORMAT = '=' * 40 + '%(asctime)s' + '=' * 40 + '\n' + '%(levelname)s: %(message)s' 
+LOG_FILE = './tmp/log.txt'
 #USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 Edg/86.0.622.69'
 RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 408]
 RETRY_TIMES = 2
@@ -93,7 +96,6 @@ extensions
 '''
 custom settings
 '''
-# LOG_LEVEL = 'DEBUG'
 
 # REDIS_URL = 'redis://localhost:6379'
 # JSONRPC_HOST = 'localhost'
