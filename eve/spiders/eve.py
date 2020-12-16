@@ -42,8 +42,8 @@ class EveSpider(scrapy.Spider):
             while True:
                 # link = self.worker_manager+ '&num=100'
                 resp = requests.get(self.worker_manager + '&num=100')
-                if 'urls' in resp.text:
-                    data = json.loads(resp.text) 
+                data = json.loads(resp.text)
+                if data['urls']:
                     self.url_list.extend(data["urls"])
                 else:
                     break
