@@ -18,7 +18,9 @@ class Products(Template):
 
     table = scrapy.Field()
     info = scrapy.Field()
+    shop_id = scrapy.Field()
     page = scrapy.Field()
+    cat_id = scrapy.Field()
     keyword = scrapy.Field()
     # conflict_do_nothing = scrapy.Field()
 
@@ -31,6 +33,17 @@ class Products(Template):
                 }
         if item.get('page'):
             info['page'] = item.get('page')
+
+        if item.get('cat_id'):
+            info['cat_id'] = item.get('cat_id')
+
+        if item.get('keyword'):
+            info['keyword'] = item.get('keyword')
+
+        if item.get('shop_id'):
+            info['shop_id'] = item.get('shop_id')
+            
+            
         return info
 
     # def handleUpdate(self, item):

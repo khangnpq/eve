@@ -1,15 +1,17 @@
+import random
 # BOT_NAME = 'github.com/dormymo/eve'
 SPIDER_MODULES = ['eve.spiders']
 NEWSPIDER_MODULE = 'eve.spiders'
 ROBOTSTXT_OBEY = False
-LOG_LEVEL = 'WARNING'
+COOKIES_ENABLED = False
+LOG_LEVEL = 'INFO'
 LOG_STDOUT = True
 LOG_FORMAT = '=' * 40 + '%(asctime)s' + '=' * 40 + '\n' + '%(levelname)s: %(message)s' 
 LOG_FILE = './tmp/log.txt'
-#USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 Edg/86.0.622.69'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 Edg/86.0.622.69'
 RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 408]
-RETRY_TIMES = 2
-# DOWNLOAD_DELAY=0.25
+RETRY_TIMES = 0
+DOWNLOAD_DELAY = random.random()/2
 DOWNLOAD_TIMEOUT = 60
 CONCURRENT_REQUESTS = 16
 CONCURRENT_ITEMS = 100
@@ -45,7 +47,7 @@ Default :
 '''
 
 DOWNLOADER_MIDDLEWARES = {
-    'eve.middlewares.cookie.RemoveCookieMiddleware': 690,
+    'eve.middlewares.cookie.RemoveCookieMiddleware': 30,
     # 'eve.middlewares.proxy.RandomProxyMiddleware': 760,
     # 'eve.middlewares.useragent.UserAgentMiddleware': 390,
 

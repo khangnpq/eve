@@ -2,6 +2,18 @@
 import json
 import re
 import copy
+import random
+import sys
+
+def proxy_generator(): 
+
+        username = 'lum-customer-jamalex-zone-static-route_err-pass_dyn'
+        password = 'la3ih9r28h2n'
+        port = 22225
+        session_id = random.random()
+        proxy = 'http://{}-session-{}:{}@zproxy.lum-superproxy.io:{}'.format(username, session_id, password, port) 
+        
+        return proxy
 
 def data_to_query(table, data, multi_insert = False, conflict_do_nothing = None): 
         
@@ -10,11 +22,7 @@ def data_to_query(table, data, multi_insert = False, conflict_do_nothing = None)
             values = ""
             for key, value in list(data.items()):
                 columns = columns + str(key) + ", "
-
-                if key == "data":
-                    values = values + "'" + str(value).replace("'", '"') + "'" + ", "
-                else:
-                    values = values + "'" + str(value)+ "'" + ", "
+                values = values + "'" + str(value).replace("'", '"') + "'" + ", "
 
             columns = columns[:-2]
             values = "(" + values[:-2] + ")"
@@ -32,10 +40,7 @@ def data_to_query(table, data, multi_insert = False, conflict_do_nothing = None)
 
             for diction in data: 
                 for key, value in list(diction.items()):
-                    if key == "data":
-                        values = values + "'" + str(value).replace("'", '"') + "'" + ", "
-                    else:
-                        values = values + "'" + str(value)+ "'" + ", "
+                    values = values + "'" + str(value).replace("'", '"') + "'" + ", "
 
                 multi_values = multi_values + "(" + values[:-2] + "), " 
                 values = ""
@@ -106,23 +111,40 @@ def find_path(obj, condition, path=None):
 
 def find_in_obj(obj, condition):
     paths = find_path(obj, condition)
-    obj_mirror = obj.copy()
+    results = []
     for path in paths:
+        obj_mirror = obj.copy()
         for address in path:
             obj_mirror = obj_mirror[address]
-    return obj_mirror
+        results.append(obj_mirror)
+    return results
 
-def generate_request_arguments(url, spider_setting, parse_page, err_parse):
+def generate_request_arguments(url, SPIDER_SETTING, proxy, parse_page, err_parse):
+
     url_type = url.get('url_type')
+    platform = url_type.split('_')[0]
+    project = url.get('project')
     worker_type = '_'.join(url_type.split('_')[1:])
+    spider_setting = SPIDER_SETTING[project][platform]
     request_setting = spider_setting[worker_type]
     payload = copy.deepcopy(request_setting.get('payload', '')) 
-    meta = {'platform': url_type.split('_')[0],
-            'project': url.get('project'),
-            'worker_type': worker_type} 
+    meta = {'platform': platform,
+            'venture': url.get('venture'),
+            'project': project,
+            'worker_type': worker_type}
+
+    if url_type == 'shopee_category':
+        meta['proxy'] = proxy
+
+    if url.get('shop_id'):
+        meta['shop_id'] = url.get('shop_id')
+
+    if url.get('cat_id'):
+        meta['cat_id'] = url.get('cat_id')
+
     if url.get('page'):
-        meta['page'] = url.get('page')
         current_page = url.get('page')
+        meta['page'] = current_page
     
     if url.get('keyword'):
         meta['keyword'] = url.get('keyword')
@@ -158,11 +180,11 @@ def generate_request_arguments(url, spider_setting, parse_page, err_parse):
                 'meta': meta,                       
                 'encoding': 'utf-8',                    
                 'priority': 0,                         
-                'dont_filter': True,                      
+                'dont_filter': False,                      
                 'errback': err_parse}                  
     meta['request'] = request
     request['meta'] = meta
-    return request
+    return request, spider_setting
 
 def generate_spider_setting(SETTING, PROJECT, site):
     SETTING['allowed_domains'] = SETTING['allowed_domains'][0].format(PROJECT[site])
@@ -173,5 +195,5 @@ def generate_spider_setting(SETTING, PROJECT, site):
     else:
         venture = PROJECT[site].split('.')[-1] #lazada.vn -> vn, lazada.co.id -> id
     SETTING['venture'] = venture
-    SETTING['db'] = PROJECT['db']
+    # SETTING['db'] = PROJECT['db']
     return SETTING

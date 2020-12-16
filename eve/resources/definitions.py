@@ -3,6 +3,7 @@ import sys
 path = '/'.join(__file__.split('/')[:-2])
 sys.path.insert(1, path +'/scripts')
 from scripts import generate_spider_setting
+
 tokopedia_search_query = """query SearchProductQueryV4($params: String!) {    ace_search_product_v4(params: $params) {      header {        totalData        totalDataText        processTime        responseCode        errorMessage        additionalParams        keywordProcess        __typename      }      data {        isQuerySafe        ticker {          text          query          typeId          __typename        }        redirection {          redirectUrl          departmentId          __typename        }        related {          relatedKeyword          otherRelated {            keyword            url            product {              id              name              price              imageUrl              rating              countReview              url              priceStr              wishlist              shop {                city                isOfficial                isPowerBadge                __typename              }              ads {                id                productClickUrl                productWishlistUrl                shopClickUrl                productViewUrl                __typename              }              __typename            }            __typename          }          __typename        }        suggestion {          currentKeyword          suggestion          suggestionCount          instead          insteadCount          query          text          __typename        }        products {          id          name          ads {            id            productClickUrl            productWishlistUrl            productViewUrl            __typename          }          badges {            title            imageUrl            show            __typename          }          category: departmentId          categoryBreadcrumb          categoryId          categoryName          countReview          discountPercentage          gaKey          imageUrl          labelGroups {            position            title            type            __typename          }          originalPrice          price          priceRange          rating          shop {            id            name            url            city            isOfficial            isPowerBadge            __typename          }          url          wishlist          sourceEngine: source_engine          __typename        }        __typename      }      __typename    }  } """
 tokopedia_category_query = """query SearchProductQuery($params: String) 
                             {
@@ -101,23 +102,36 @@ SHOPEE =    {
             'allowed_domains': ['{}'],
             'start_urls': ['https://{}/'],
             'custom_settings': {
-                                'CONCURRENT_REQUESTS': 15,
+                                'CONCURRENT_REQUESTS': 50,
                                 'DOWNLOAD_TIMEOUT': 30,
+                                'DOWNLOADER_MIDDLEWARES': {
+                                'eve.middlewares.cookie.RemoveCookieMiddleware': 40,
+                                # 'eve.middlewares.proxy.RandomProxyMiddleware': 30}
+                                }
                                },
             'headers': {'referer': 'https://{}/',
-                        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:73.0) Gecko/20100101 Firefox/73.0',
+                        # 'if-none-match-': '55b03-0b65cbc01e512d9bf12c34f1f8deeedb',
+                        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36 Edg/87.0.664.60',
                         },
             'product': {
                         'method': 'GET',
                         'table': 'lazada_product_info'
                         },
-            'category':{
-                       'method': 'GET',
-                       'table': 'shopee_cate_info_product_list_v1'
-                      },
+            'category': {
+                        'method': 'GET',
+                        'table': 'shopee_category'
+                        },
+            'shop': {
+                    'method': 'GET',
+                    'table': 'shopee_shop'
+                    },
+            'shop_lop': {
+                    'method': 'GET',
+                    'table': 'shopee_shop_lop'
+                    },
             'venture': '{}',
-            'db': '{}',
-            'schema': 'raw_data',
+            'db': 'eve',
+            'schema': 'DS-3_raw_data',
             'error': 'worker_failed_info' 
             }
 
@@ -128,11 +142,11 @@ SETTING_MAPPING =   {
                     }
 
 PROJECT =   {
-            'xmi': {
-                    'db': 'xmi',
+            'DS-3': {
+                    'db': 'eve',
                     'tokopedia': 'tokopedia.com',
                     'lazada': 'lazada.co.id',
-                    'shopee': 'shopee.co.id',
+                    'shopee': 'shopee.vn',
                     }
             }
 

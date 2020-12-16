@@ -16,7 +16,7 @@ class EvePipeline(object):
 
     def _getPostgreInstance(self, item):
         dbname_platform_wtype = item.__class__.__name__
-        database_name = dbname_platform_wtype.split('_')[0]
+        database_name = 'eve'
         if database_name not in self.postgreDict:
             self.postgreDict[database_name] = PostgreSQLClient(database_name)
         return self.postgreDict[database_name]
@@ -24,11 +24,11 @@ class EvePipeline(object):
     def process_item(self, item, spider):
         postgreInstance = self._getPostgreInstance(item)
         content = ItemAdapter(item)
-        db_name = item.__class__.__name__.split('_')[0]
+        db_name = 'eve'
         # try:
         if hasattr(item, 'handleInsert'):
             info = getattr(item, 'handleInsert')(content)
-            table_name = content['schema']+'.'+content['table']
+            table_name = '"{}"'.format(content['schema']) + '.' + '"{}"'.format(content['table'])
             if db_name not in self.data:
                 self.data[db_name] = {}
             if table_name not in self.data[db_name]:
