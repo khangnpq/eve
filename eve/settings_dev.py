@@ -10,7 +10,7 @@ LOG_FORMAT = '=' * 40 + '%(asctime)s' + '=' * 40 + '\n' + '%(levelname)s: %(mess
 LOG_FILE = './tmp/log.txt'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 Edg/86.0.622.69'
 RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 408]
-RETRY_TIMES = 0
+RETRY_TIMES = 2
 DOWNLOAD_DELAY = random.random()/2
 DOWNLOAD_TIMEOUT = 60
 CONCURRENT_REQUESTS = 16

@@ -102,8 +102,8 @@ SHOPEE =    {
             'allowed_domains': ['{}'],
             'start_urls': ['https://{}/'],
             'custom_settings': {
-                                'CONCURRENT_REQUESTS': 50,
-                                'DOWNLOAD_TIMEOUT': 30,
+                                'CONCURRENT_REQUESTS': 100,
+                                'DOWNLOAD_TIMEOUT': 60,
                                 'DOWNLOADER_MIDDLEWARES': {
                                 'eve.middlewares.cookie.RemoveCookieMiddleware': 40,
                                 # 'eve.middlewares.proxy.RandomProxyMiddleware': 30}
