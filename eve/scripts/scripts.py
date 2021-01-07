@@ -70,13 +70,12 @@ def escape_dict(diction):
         elif type(val) == str:
             diction[key] = str(val).replace("'", "").replace('"', "").replace('\\',  '')
     return diction
-def escape(var): 
-    string = str(var) 
-    string = string.replace('/',  '') 
-    string = string.replace('\\',  '') 
-    string = string.replace("'", "")
-    string = string.replace('"', "") 
-    return string 
+def escape(text):
+    remove_list = ''':'"./\;'''
+    text = text.replace(r'\u', 'YOUR_MAMA')
+    result = "".join(text[i] if text[i] not in remove_list else ' ' for i in range(len(text)))
+    result = result.replace('YOUR_MAMA', r'\u')
+    return result.strip()
 
 def replace_path(obj, rules):
     for key, val in rules.items():

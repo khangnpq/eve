@@ -62,3 +62,5 @@ target/
 .ipynb_checkpoints
 tmp/*
 .vscode
+config.json
+log.txt

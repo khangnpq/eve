@@ -24,10 +24,11 @@ class PostgreSQLClient(object):
             except:
                 continue
     
-    def run_query(self, query):
-        self.db.run_query(query)
+    def run_query(self, query, return_data=False):
+        data = self.db.run_query(query, return_data)
+        return data
 
-    def close(self):
+    def disconnect(self):
         self.db.disconnect()
 
 # class TestDAO(PostgreSQLClient):

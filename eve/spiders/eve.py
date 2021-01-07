@@ -34,107 +34,141 @@ class EveSpider(scrapy.Spider):
             file = open(str(os.getcwd()) + "/../test.txt", "w+")
             file.close() 
         # worker_manager="http://13.212.181.246:5000/getdata?project=eve_q&num=100"
-        if '&num=' in self.worker_manager: # defined number of queue to crawl
-            resp = requests.get(self.worker_manager) # proceed to crawl with the exact queues
-            data = json.loads(resp.text) 
-            self.url_list.extend(data["urls"])
-        else: # execute all queue exist in the link
-            while True:
-                # link = self.worker_manager+ '&num=100'
-                resp = requests.get(self.worker_manager + '&num=100')
-                data = json.loads(resp.text)
-                if data['urls']:
-                    self.url_list.extend(data["urls"])
-                else:
-                    break
-
-        # self.url_list = [ 
-        # TOKOPEDIA CATEGORY
-        # {
-        # "url": 'https://gql.tokopedia.com/',
-        # "url_type": "tokopedia_category",
-        # 'sc': 24,
-        # 'row': 60,
-        # 'page': 1,
-        # 'project': 'xmi'
-        # },
-        # TOKOPEDIA SEARCH
-        # {
-        # "url": 'https://gql.tokopedia.com/',
-        # "url_type": "tokopedia_search",
-        # 'keyword': 'xiaomi',
-        # 'row': 60,
-        # 'page': 1,
-        # 'project': 'xmi'
-        # },
-        # LAZADA SELLER CENTER
-        # {
-        # "url": 'https://www.lazada.co.id/shop/site/api/seller/products?shopId=8234&offset=0&limit=50',
-        # "url_type": 'lazada_seller_center',
-        # "shop_id": 8234, 
-        # "project": 'xmi'
-        # },
-        # LAZADA CATEGORY 
-        # {
-        # "url": "https://www.lazada.co.id/beli-handphone/?page=1",
-        # "url_type": "lazada_category",
-        # "page": 1,
-        # "project": "xmi"
-        # },
-        # LAZADA SEARCH 
-        # {
-        # "url": "https://www.lazada.co.id/catalog/?q=Anti-Aging&page=1",
-        # "url_type": "lazada_search",
-        # "page": 1,
-        # "keyword": "Anti-Aging",
-        # "project": "xmi"
-        # },
-        # SHOPEE PRODUCT
-        # {
-        # 'url': 'https://shopee.co.id/api/v2/item/get?itemid={}&shopid={}'.format(7424601528, 148045025), 
-        # 'url_type': 'shopee_product',
-        # 'item_id': 7424601528,
-        # 'shop_id': 148045025,
-        # 'project': 'xmi',
-        # 'get_review': False 
-        # },
-        # SHOPEE SELLER
-        # {
-        # 'url': 'https://shopee.vn/api/v2/shop/get?shopid={}'.format(343663098),
-        # 'url_type': 'shopee_shop',
-        # 'shop_id': 343663098,
-        # 'project': 'DS-3',
-        # 'venture': 'vn'
-        # },
-        # SHOPEE CATEGORY 
-        # {
-        # "url": 'https://shopee.vn/api/v2/search_items/?by=relevancy&keyword=&limit=50&match_id=2365&newest=0&order=desc&page_type=search&version=2',
-        # "url_type": 'shopee_category',
-        # "cat_id": 2365, 
-        # 'keyword': '',
-        # "page": 1, 
-        # "project": 'DS-3',
-        # 'venture': 'vn'
-        # },
-        # ]
+        try:
+            if '&num=' in self.worker_manager: # defined number of queue to crawl
+                resp = requests.get(self.worker_manager) # proceed to crawl with the exact queues
+                data = json.loads(resp.text) 
+                self.url_list.extend(data["urls"])
+            else: # execute all queue exist in the link
+                while True:
+                    # link = self.worker_manager+ '&num=100'
+                    resp = requests.get(self.worker_manager + '&num=100')
+                    data = json.loads(resp.text)
+                    if data['urls']:
+                        self.url_list.extend(data["urls"])
+                    else:
+                        break
+        except: # testing
+            self.url_list = [ 
+            # TOKOPEDIA CATEGORY
+            # {
+            # "url": 'https://gql.tokopedia.com/',
+            # "url_type": "tokopedia_category",
+            # 'sc': 24,
+            # 'row': 60,
+            # 'page': 1,
+            # 'project': 'xmi'
+            # },
+            # TOKOPEDIA SEARCH
+            # {
+            # "url": 'https://gql.tokopedia.com/',
+            # "url_type": "tokopedia_search",
+            # 'keyword': 'xiaomi',
+            # 'row': 60,
+            # 'page': 1,
+            # 'project': 'xmi'
+            # },
+            # LAZADA SELLER CENTER
+            # {
+            # "url": 'https://www.lazada.co.id/shop/site/api/seller/products?shopId=8234&offset=0&limit=50',
+            # "url_type": 'lazada_seller_center',
+            # "shop_id": 8234, 
+            # "project": 'xmi'
+            # },
+            # LAZADA CATEGORY 
+            # {
+            # "url": "https://www.lazada.co.id/beli-handphone/?page=1",
+            # "url_type": "lazada_category",
+            # "page": 1,
+            # "project": "xmi"
+            # },
+            # LAZADA SEARCH 
+            # {
+            # "url": "https://www.lazada.co.id/catalog/?q=Anti-Aging&page=1",
+            # "url_type": "lazada_search",
+            # "page": 1,
+            # "keyword": "Anti-Aging",
+            # "project": "xmi"
+            # },
+            # SHOPEE PRODUCT
+            {
+            'url': 'https://shopee.vn/api/v2/item/get?itemid={}&shopid={}'.format(1819126512, 69839196), 
+            'url_type': 'shopee_product',
+            'item_id': 1819126512,
+            'shop_id': 69839196,
+            'project': 'DS-3',
+            'get_review': False 
+            },
+            {
+            'url': 'https://shopee.vn/api/v2/item/get?itemid={}&shopid={}'.format(3517890333, 69839196), 
+            'url_type': 'shopee_product',
+            'item_id': 3517890333,
+            'shop_id': 69839196,
+            'project': 'DS-3',
+            'get_review': False 
+            },
+            {
+            'url': 'https://shopee.vn/api/v2/item/get?itemid={}&shopid={}'.format(6439237117, 69839196), 
+            'url_type': 'shopee_product',
+            'item_id': 6439237117,
+            'shop_id': 69839196,
+            'project': 'DS-3',
+            'get_review': False 
+            },
+            {
+            'url': 'https://shopee.vn/api/v2/item/get?itemid={}&shopid={}'.format(7400114527, 69839196), 
+            'url_type': 'shopee_product',
+            'item_id': 7400114527,
+            'shop_id': 69839196,
+            'project': 'DS-3',
+            'get_review': False 
+            },
+            {
+            'url': 'https://shopee.vn/api/v2/item/get?itemid={}&shopid={}'.format(5941797573, 69839196), 
+            'url_type': 'shopee_product',
+            'item_id': 5941797573,
+            'shop_id': 69839196,
+            'project': 'DS-3',
+            'get_review': False 
+            },
+            # SHOPEE SELLER
+            # {
+            # 'url': 'https://shopee.vn/api/v2/shop/get?shopid={}'.format(343663098),
+            # 'url_type': 'shopee_shop',
+            # 'shop_id': 343663098,
+            # 'project': 'DS-3',
+            # 'venture': 'vn'
+            # },
+            # SHOPEE CATEGORY 
+            # {
+            # "url": 'https://shopee.vn/api/v2/search_items/?by=relevancy&keyword=&limit=50&match_id=2365&newest=0&order=desc&page_type=search&version=2',
+            # "url_type": 'shopee_category',
+            # "cat_id": 2365, 
+            # 'keyword': '',
+            # "page": 1, 
+            # "project": 'DS-3',
+            # 'venture': 'vn'
+            # },
+            ]
         
-        if find_in_obj(self.url_list, 'shopee_category'):
-            self.req = len(self.url_list) + 2
-        else:
-            self.req = len(self.url_list)
-        while True:
-            try:
-                url = self.url_list.pop(0)
-                if url.get('url_type') == 'shopee_category':
-                    if self.proxy_usage % 5 == 0 and self.proxy_usage > 0:
-                        self.proxy = proxy_generator()
-                    self.proxy_usage += 1
-                self.curr += 1
-            except IndexError:
-                if self.curr <= self.req:
-                    time.sleep(1)
-                else:
-                    break
+        # if find_in_obj(self.url_list, 'shopee_category'):
+        #     self.req = len(self.url_list) + 2
+        # else:
+        #     self.req = len(self.url_list)
+        # while True:
+        #     try:
+        #         url = self.url_list.pop(0)
+        #         if url.get('url_type') == 'shopee_category':
+        #             if self.proxy_usage % 5 == 0 and self.proxy_usage > 0:
+        #                 self.proxy = proxy_generator()
+        #             self.proxy_usage += 1
+        #         self.curr += 1
+        #     except IndexError:
+        #         if self.curr < self.req:
+        #             time.sleep(1)
+        #         else:
+        #             break
+        for url in self.url_list:
             request, spider_setting = generate_request_arguments(
                                                                 url,
                                                                 SPIDER_SETTING, 

@@ -79,7 +79,7 @@ class EvePipeline(object):
                 if len(self.data[db].keys()) == 0:
                     self.data.pop(db, None)
             del new_data
-            self.postgreDict[database_name].close()
+            self.postgreDict[database_name].disconnect()
 
 class DefaultValuesPipeline(object):
 
