@@ -1,56 +1,28 @@
 # coding:utf8
-import json
 import re
 import copy
 import random
-import sys
+from configparser import ConfigParser
+from eve.items.items import Products, ErrorInfo
+import scrapy
+import json
 
 def proxy_generator(): 
-
-        username = 'lum-customer-jamalex-zone-static-route_err-pass_dyn'
-        password = 'la3ih9r28h2n'
-        port = 22225
-        session_id = random.random()
-        proxy = 'http://{}-session-{}:{}@zproxy.lum-superproxy.io:{}'.format(username, session_id, password, port) 
-        
-        return proxy
-
-def data_to_query(table, data, multi_insert = False, conflict_do_nothing = None): 
-        
-        if multi_insert == False: 
-            columns = ""
-            values = ""
-            for key, value in list(data.items()):
-                columns = columns + str(key) + ", "
-                values = values + "'" + str(value).replace("'", '"') + "'" + ", "
-
-            columns = columns[:-2]
-            values = "(" + values[:-2] + ")"
-
-            query = "INSERT INTO {} ({}) VALUES {}".format(table, columns, values)
-
-            if conflict_do_nothing != None: 
-                query = query + ' ON CONFLICT ({}) DO NOTHING'.format(",".join(conflict_do_nothing)) 
-
-
-        elif len(data) > 0: 
-            values = ""
-            columns = ", ".join(list(data[0].keys()))
-            multi_values = "" 
-
-            for diction in data: 
-                for key, value in list(diction.items()):
-                    values = values + "'" + str(value).replace("'", '"') + "'" + ", "
-
-                multi_values = multi_values + "(" + values[:-2] + "), " 
-                values = ""
-
-            query = "INSERT INTO {} ({}) VALUES {}".format(table, columns, multi_values[:-2])
-
-            if conflict_do_nothing != None: 
-                query = query + ' ON CONFLICT ({}) DO NOTHING'.format(",".join(conflict_do_nothing)) 
-            
-        return query 
+    # read config file
+    parser = ConfigParser()
+    parser.read('eve/resources/credentials.ini')
+    if parser.has_section('proxy'):
+        credentials = dict(parser.items('proxy'))
+    session_id = random.random()
+    proxy = 'http://{}-session-{}:{}@zproxy.lum-superproxy.io:{}'.format(
+                                                                         credentials['username'], 
+                                                                         session_id, 
+                                                                         credentials['password'], 
+                                                                         credentials['port']
+                                                                        ) 
+    
+    return proxy
+    
 def escape_list (lis):
     value = []
     for val in lis:
@@ -61,6 +33,7 @@ def escape_list (lis):
         else:
             value.append(val)
     return value
+
 def escape_dict(diction):
     for key, val in diction.items():
         if type(val) == list:
@@ -70,6 +43,7 @@ def escape_dict(diction):
         elif type(val) == str:
             diction[key] = str(val).replace("'", "").replace('"', "").replace('\\',  '')
     return diction
+
 def escape(text):
     remove_list = ''':'"./\;'''
     text = text.replace(r'\u', 'YOUR_MAMA')
@@ -118,81 +92,110 @@ def find_in_obj(obj, condition):
         results.append(obj_mirror)
     return results
 
-def generate_request_arguments(url, SPIDER_SETTING, proxy, parse_page, err_parse):
+def generate_request_arguments(request_meta, SETTING, parse_page, err_parse):
 
-    url_type = url.get('url_type')
-    platform = url_type.split('_')[0]
-    project = url.get('project')
-    worker_type = '_'.join(url_type.split('_')[1:])
-    spider_setting = SPIDER_SETTING[project][platform]
-    request_setting = spider_setting[worker_type]
-    payload = copy.deepcopy(request_setting.get('payload', '')) 
-    meta = {'platform': platform,
-            'venture': url.get('venture'),
-            'project': project,
-            'worker_type': worker_type}
+    meta = {}
+    for key, val in request_meta.items():
+        if key not in ['url', 'request_type', 'use_proxy']:
+            meta[key] = val
+        elif key == 'url':
+            request_url = val
+            request_site = re.findall('\w*(?:\.\w*)+', request_url)[0]
+        elif key == 'use_proxy':
+            if val:
+                meta['proxy'] = proxy_generator()
+        else:
+            request_type = val
+            worker_type = request_type[request_type.find('_') + 1:]
+        
+    request_setting = SETTING[meta['platform']]
+    setting = generate_spider_setting(request_setting, request_site, request_url, meta['venture'])
+    worker_setting = request_setting[worker_type]
+    meta['table'] = worker_setting['table']
+    payload = worker_setting.get('payload', '') # Query-based payload
 
-    if url_type == 'shopee_category':
-        meta['proxy'] = proxy
+    request = {
+               'url': request_url,               
+               'callback': parse_page,                 
+               'method': worker_setting.get('method', 'GET'),  
+               'headers': setting['headers'], 
+               'body': json.dumps(payload),          
+               'meta': meta,                                                
+               'dont_filter': True,                      
+               'errback': err_parse
+              }                  
+    return request
 
-    if url.get('shop_id'):
-        meta['shop_id'] = url.get('shop_id')
+def generate_spider_setting(SETTING, site, url, venture):
+    setting = copy.deepcopy(SETTING)
+    setting['headers']['referer'] = setting['headers']['referer'].format(site)
+    setting['venture'] = venture
+    return setting
 
-    if url.get('cat_id'):
-        meta['cat_id'] = url.get('cat_id')
+def generate_item_class(name, field_list, template=Products):
+    if isinstance(template, str):
+        if template == 'product':
+            template = Products
+        elif template == 'error':
+            template = ErrorInfo
+    field_dict = {}
+    for field_name in field_list:
+        field_dict[field_name] = scrapy.Field()
+    return type(name,(template,), field_dict)()
 
-    if url.get('page'):
-        current_page = url.get('page')
-        meta['page'] = current_page
-    
-    if url.get('keyword'):
-        meta['keyword'] = url.get('keyword')
 
-    request_url = url.get('url')
-    if url_type == 'tokopedia_category':     
-        cat_id = url.get('sc')
-        row = url.get('row')
-        payload['variables'] = {'params': payload['variables']['params'].format(str(cat_id), 
-                                                                                str(row), 
-                                                                                str((current_page-1)*row+1), 
-                                                                                str(current_page))
-                                }
-    elif url_type == 'tokopedia_search':      
-        row = url.get('row')
-        payload['variables'] = {'params': payload['variables']['params'].format(str(current_page), 
-                                                                                str(url.get('keyword')), 
-                                                                                str(row),
-                                                                                str((current_page-1)*row)), 
-                                                                                
-                                }
-    elif url_type == 'lazada_category':
-        pass
-    elif url_type == 'shopee_category':
-        pass
-    
-    request =  {'url': request_url,               
-                'callback': parse_page,                 
-                'method': request_setting['method'],  
-                'headers': spider_setting['headers'], 
-                'body': json.dumps(payload),        
-                'cookies': None,                   
-                'meta': meta,                       
-                'encoding': 'utf-8',                    
-                'priority': 0,                         
-                'dont_filter': False,                      
-                'errback': err_parse}                  
-    meta['request'] = request
-    request['meta'] = meta
-    return request, spider_setting
+#### LEGACY ####
+## TOKOPEDIA
 
-def generate_spider_setting(SETTING, PROJECT, site):
-    SETTING['allowed_domains'] = SETTING['allowed_domains'][0].format(PROJECT[site])
-    SETTING['start_urls'] = SETTING['start_urls'][0].format(PROJECT[site])
-    SETTING['headers']['referer'] = SETTING['headers']['referer'].format(PROJECT[site])
-    if site == 'tokopedia':
-        venture = 'id'
-    else:
-        venture = PROJECT[site].split('.')[-1] #lazada.vn -> vn, lazada.co.id -> id
-    SETTING['venture'] = venture
-    # SETTING['db'] = PROJECT['db']
-    return SETTING
+# payload = copy.deepcopy(request_setting.get('payload', ''))
+# if url_type == 'tokopedia_category':     
+#     cat_id = request_meta.get('sc')
+#     row = request_meta.get('row')
+#     payload['variables'] = {'params': payload['variables']['params'].format(str(cat_id), 
+#                                                                             str(row), 
+#                                                                             str((current_page-1)*row+1), 
+#                                                                             str(current_page))
+#                             }
+# elif url_type == 'tokopedia_search':      
+#     row = request_meta.get('row')
+#     payload['variables'] = {'params': payload['variables']['params'].format(str(current_page), 
+#                                                                             str(request_meta.get('keyword')), 
+#                                                                             str(row),
+#                                                                             str((current_page-1)*row)), 
+
+# def data_to_query(table, data, multi_insert = False, conflict_do_nothing = None): 
+        
+#     if multi_insert == False: 
+#         columns = ""
+#         values = ""
+#         for key, value in list(data.items()):
+#             columns = columns + str(key) + ", "
+#             values = values + "'" + str(value).replace("'", '"') + "'" + ", "
+
+#         columns = columns[:-2]
+#         values = "(" + values[:-2] + ")"
+
+#         query = "INSERT INTO {} ({}) VALUES {}".format(table, columns, values)
+
+#         if conflict_do_nothing != None: 
+#             query = query + ' ON CONFLICT ({}) DO NOTHING'.format(",".join(conflict_do_nothing)) 
+
+
+#     elif len(data) > 0: 
+#         values = ""
+#         columns = ", ".join(list(data[0].keys()))
+#         multi_values = "" 
+
+#         for diction in data: 
+#             for key, value in list(diction.items()):
+#                 values = values + "'" + str(value).replace("'", '"') + "'" + ", "
+
+#             multi_values = multi_values + "(" + values[:-2] + "), " 
+#             values = ""
+
+#         query = "INSERT INTO {} ({}) VALUES {}".format(table, columns, multi_values[:-2])
+
+#         if conflict_do_nothing != None: 
+#             query = query + ' ON CONFLICT ({}) DO NOTHING'.format(",".join(conflict_do_nothing)) 
+        
+#     return query 

@@ -1,5 +1,7 @@
 # coding:utf8
+import os
 import random
+from configparser import ConfigParser
 
 class RandomProxyMiddleware(object):
     def __init__(self):
@@ -7,11 +9,18 @@ class RandomProxyMiddleware(object):
 
     def proxy_generator(self): 
 
-        username = 'lum-customer-jamalex-zone-static-route_err-pass_dyn'
-        password = 'la3ih9r28h2n'
-        port = 22225
+        # read config file
+        parser = ConfigParser()
+        parser.read(os.path.dirname(os.path.realpath(__file__)) + '/../resources/credentials.ini')
+        if parser.has_section('proxy'):
+            credentials = dict(parser.items('proxy'))
         session_id = random.random()
-        proxy = 'http://{}-session-{}:{}@zproxy.lum-superproxy.io:{}'.format(username, session_id, password, port) 
+        proxy = 'http://{}-session-{}:{}@zproxy.lum-superproxy.io:{}'.format(
+                                                                             credentials['username'], 
+                                                                             session_id, 
+                                                                             credentials['password'], 
+                                                                             credentials['port']
+                                                                            ) 
         
         return proxy
 

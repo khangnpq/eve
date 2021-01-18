@@ -60,7 +60,10 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
-tmp/*
+.ipynb
+.log
+credentials.ini
 .vscode
-config.json
-log.txt
+dbs
+settings_dev.py
+setup.py

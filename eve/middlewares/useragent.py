@@ -11,8 +11,8 @@ class UserAgentMiddleware(object):
     def process_request(self, request, spider):
         ua = random.choice(self.user_agent_list)
         if ua:
-            request.headers['User-Agent'] = ua
+            request.headers['user-agent'] = ua
 
     def process_exception(self, request, exception, spider):
         ua = random.choice(self.user_agent_list)
-        request.headers['User-Agent'] = ua
+        request.headers['user-agent'] = ua

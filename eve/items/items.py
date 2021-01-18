@@ -8,42 +8,23 @@ import scrapy
 
 class Template(scrapy.Item):
 
-    db = scrapy.Field()
+    database = scrapy.Field()
     schema = scrapy.Field()
     created_at = scrapy.Field()
     venture = scrapy.Field()
     platform = scrapy.Field()
+    table = scrapy.Field()
+    data = scrapy.Field()
 
 class Products(Template):
 
-    table = scrapy.Field()
-    info = scrapy.Field()
-    shop_id = scrapy.Field()
-    page = scrapy.Field()
-    cat_id = scrapy.Field()
-    keyword = scrapy.Field()
-    # conflict_do_nothing = scrapy.Field()
-
-    def handleInsert(self, item):
-        info = {
-                'venture': item.get('venture'),
-                'platform': item.get('platform'),
-                'created_at': item.get('created_at'),
-                'data': item.get('info')
-                }
-        if item.get('page'):
-            info['page'] = item.get('page')
-
-        if item.get('cat_id'):
-            info['cat_id'] = item.get('cat_id')
-
-        if item.get('keyword'):
-            info['keyword'] = item.get('keyword')
-
-        if item.get('shop_id'):
-            info['shop_id'] = item.get('shop_id')
-            
-            
+    def handleInsert(self, item, column_list):
+        info = {}
+        for key, val in item.items():
+            # if key not in ['depth', 'download_latency', 'download_slot', 'download_timeout',
+            #                'database', 'schema', 'table']:
+            if key in column_list:
+                info[key] = val
         return info
 
     # def handleUpdate(self, item):
@@ -51,19 +32,11 @@ class Products(Template):
 
 class ErrorInfo(Template):
 
-    table = scrapy.Field()
-    failed_url = scrapy.Field()
-    failed_status = scrapy.Field()
-
-    def handleInsert(self, item):
-        info = {
-                'venture': item.get('venture'),
-                'platform': item.get('platform'),
-                'created_at': item.get('created_at'),
-                'failed_url': item.get('failed_url'),
-                'pfailed_statusage': item.get('failed_status')
-                }
+    def handleInsert(self, item, column_list):
+        info = {}
+        for key, val in item.items():
+            # if key not in ['depth', 'download_latency', 'download_slot', 'download_timeout',
+            #                'database', 'schema', 'table']:
+            if key in column_list:
+                info[key] = val
         return info
-
-def generate_item_class(name, template=Products):
-    return type(name,(template,), {})()

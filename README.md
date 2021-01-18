@@ -1,11 +1,9 @@
-# scrappy
-scrapy best practice
 ## requirements
     pip install requirements.txt
 ## structrue
 	|____bin    #bash scripts
 	|____requirements.txt
-	|____scrappy
+	|____eve
 	| |____dbs    #storge dao
 	| |____extensions    #scrapy extensions
 	| |____items
@@ -16,6 +14,7 @@ scrapy best practice
 	| |____spiders    #spiders definition
 	| |____utils    #python utils
 	|____scrapy.cfg
+	|____main.py   #run spider
 	
 ## usage
 &#160; &#160; &#160; &#160;_code some spider in spiders_

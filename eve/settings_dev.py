@@ -1,18 +1,28 @@
 import random
+import os
+import sys
+import logging
+from datetime import datetime
+
 # BOT_NAME = 'github.com/dormymo/eve'
 SPIDER_MODULES = ['eve.spiders']
-NEWSPIDER_MODULE = 'eve.spiders'
+# NEWSPIDER_MODULE = 'eve.spiders'
 ROBOTSTXT_OBEY = False
 COOKIES_ENABLED = False
-LOG_LEVEL = 'INFO'
+
+cwd = os.getcwd()
+log_path = '/'.join([cwd[:cwd.find('eve')+3], 'log', 'error.log'])
+
+LOG_LEVEL = 'WARNING'
 LOG_STDOUT = True
-LOG_FORMAT = '=' * 40 + '%(asctime)s' + '=' * 40 + '\n' + '%(levelname)s: %(message)s' 
-LOG_FILE = './tmp/log.txt'
+LOG_FORMAT = '%(asctime)s {%(filename)s:%(lineno)d} %(levelname)s %(message)s' 
+LOG_FILE = log_path
+
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 Edg/86.0.622.69'
 RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 408]
-RETRY_TIMES = 2
+RETRY_TIMES = 0
 DOWNLOAD_DELAY = random.random()/4
-DOWNLOAD_TIMEOUT = 60
+DOWNLOAD_TIMEOUT = 20
 CONCURRENT_REQUESTS = 16
 CONCURRENT_ITEMS = 100
 # CONCURRENT_REQUESTS_PER_DOMAIN=1
@@ -47,9 +57,9 @@ Default :
 '''
 
 DOWNLOADER_MIDDLEWARES = {
-    'eve.middlewares.cookie.RemoveCookieMiddleware': 30,
-    # 'eve.middlewares.proxy.RandomProxyMiddleware': 760,
-    # 'eve.middlewares.useragent.UserAgentMiddleware': 390,
+    'eve.middlewares.cookie.RemoveCookieMiddleware': 400,
+    # 'eve.middlewares.proxy.RandomProxyMiddleware': 450,
+    'eve.middlewares.useragent.UserAgentMiddleware': 490,
 
 }
 # EXTENSIONS = {
@@ -58,8 +68,8 @@ DOWNLOADER_MIDDLEWARES = {
 #     'eve.extensions.scrapy_jsonrpc.webservice.WebService': 100
 # }
 ITEM_PIPELINES = {
-    'eve.pipelines.EvePipeline': 300,
-    'eve.pipelines.DefaultValuesPipeline': 50
+    'eve.pipelines.DefaultValuesPipeline': 500,
+    'eve.pipelines.InsertToDBPipeline': 550,
 }
 AUTOTHROTTLE_ENABLED = False
 AUTOTHROTTLE_START_DELAY = 1
@@ -103,11 +113,3 @@ custom settings
 # JSONRPC_HOST = 'localhost'
 # # resource absolute direction
 RESOURCE_DIR = "/home/khangnpq/Projects/eve/eve/resources"
-# POSTGRESQL
-POSTGRESQL_HOST = '13.229.120.17'
-POSTGRESQL_PORT = '35432'
-POSTGRESQL_USER = 'crawlist'
-POSTGRESQL_PASSWD = 'LsHkQFvQshjH6xD6'
-POSTGRESQL_DB = 'postgres'
-# Mongo
-# MONGO_URL = 'mongodb://user:password@localhost/db_name?authMechanism=SCRAM-SHA-1'
