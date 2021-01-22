@@ -22,8 +22,8 @@ SCRAPYDWEB_PORT = 4000
 
 # The default is False, set it to True to enable basic auth for the web UI.
 ENABLE_AUTH = True
-USERNAME = 'khangnpq'
-PASSWORD = '123456'
+USERNAME = 'jamalex'
+PASSWORD = '3_nf\EqRS`y;%PBB'
 
 
 # Make sure that [Scrapyd](https://github.com/scrapy/scrapyd) has been installed
