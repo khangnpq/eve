@@ -18,6 +18,8 @@ class Template(scrapy.Item):
 
 class Products(Template):
 
+    is_cleaned = scrapy.Field()
+    
     def handleInsert(self, item, column_list):
         info = {}
         for key, val in item.items():

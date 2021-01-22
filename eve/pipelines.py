@@ -3,6 +3,8 @@ from datetime import datetime
 from collections import defaultdict
 import sqlalchemy as sa
 from configparser import ConfigParser
+import requests
+import json
 
 class InsertToDBPipeline(object):
     def __init__(self):
@@ -36,6 +38,7 @@ class InsertToDBPipeline(object):
         self.data[database][table].append(info)
 
     def close_spider(self, spider):
+        cleaner = []
         for database, engine_table in self.DB_instance.items():
             engine = engine_table['engine']
             for table, info_list in self.data[database].items():
@@ -54,10 +57,23 @@ class InsertToDBPipeline(object):
                                      table_obj.insert(),
                                      info_list
                                     )
+                # task manager add clean raw data task
+                cleaner.append(
+                                {
+                                'database': database,
+                                'schema': table_obj.schema,
+                                'table': table
+                                }
+                              )
             engine.dispose()
+        # send clean task
+        json_dict = {"urls": cleaner}
+        requests.post("http://13.212.181.246:5000/submitdata?project=eve_q", data = json.dumps(json_dict))
 
 class DefaultValuesPipeline(object):
 
     def process_item(self, item, spider):
         item.setdefault('created_at', datetime.now())
+        if hasattr(item,'data'):
+            item.setdefault('is_cleaned', 0)
         return item

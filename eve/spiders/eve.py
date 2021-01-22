@@ -1,5 +1,7 @@
 # coding:utf8
 import scrapy
+import requests
+import json
 from scrapy.spidermiddlewares.httperror import HttpError
 from twisted.internet.error import DNSLookupError, TimeoutError, TCPTimedOutError
 from eve.scripts.scripts import generate_request_arguments, generate_item_class
@@ -8,19 +10,22 @@ from eve.resources.definitions import SPIDER_SETTING
 class EveSpider(scrapy.Spider):
     name = 'eve'
 
-    def __init__(self, allowed_domains=None, request_list=None, *args, **kwargs):
+    def __init__(self, worker_manager=None, request_list=None, *args, **kwargs):
         super(EveSpider, self).__init__(*args, **kwargs)
-        if allowed_domains:
-            self.allowed_domains = allowed_domains
-        if request_list:
-            self.request_list = request_list
+        if worker_manager:
+            self.worker_manager = worker_manager
 
     def start_requests(self):
-        if hasattr(self, 'request_list'): # not a test case
-            pass
+        if hasattr(self, 'worker_manager'): # not a test case
+            # worker_manager = "http://13.212.181.246:5000/getdata?project=eve_q&num=100"
+            data = requests.get(self.worker_manager)
+            data = json.loads(data.text) 
+            self.request_list = data.get("urls")
         else: # reources/test_case.py
             from eve.resources.test_case import REQUEST_LIST
             self.request_list = REQUEST_LIST
+        if not self.request_list: 
+            raise scrapy.exceptions.CloseSpider("No Job.")
         for request_meta in self.request_list:
             request = generate_request_arguments(
                                                  request_meta=request_meta,
@@ -76,7 +81,8 @@ class EveSpider(scrapy.Spider):
         error_data['request_meta'] = request_meta
         error_data['failed_reason'] = failed_reason
         error_data['table'] = 'worker_failed_info'
-
+        error_data['database'] = request_meta['database']
+        error_data['schema'] = request_meta['schema']
         yield error_data              
 
     # def close(self, reason):  

@@ -40,18 +40,18 @@ REQUEST_LIST = [
             # "project": "xmi"
             # },
             # SHOPEE PRODUCT
-            {
-            "url": "https://shopee.vn/api/v2/item/get?itemid={}&shopid={}".format(1819126512, 69839196), 
-            "request_type": "shopee_product",
-            "platform": "shopee",
-            "venture": "vn",
-            "database": "eve",
-            "schema": "DS-3_raw_data",
-            "item_id": 1819126512,
-            "shop_id": 69839196,
-            "get_review": 'false',
-            "use_proxy": False
-            },
+            # {
+            # "url": "https://shopee.vn/api/v2/item/get?itemid={}&shopid={}".format(1819126512, 69839196), 
+            # "request_type": "shopee_product",
+            # "platform": "shopee",
+            # "venture": "vn",
+            # "database": "eve",
+            # "schema": "DS-3_raw_data",
+            # "item_id": 1819126512,
+            # "shop_id": 69839196,
+            # "get_review": 'false',
+            # "use_proxy": False
+            # },
             # {
             # "url": "https://shopee.vn/api/v2/item/get?itemid={}&shopid={}".format(3517890333, 69839196), 
             # "url_type": "shopee_product",
@@ -102,4 +102,94 @@ REQUEST_LIST = [
             # "project": "DS-3",
             # "venture": "vn"
             # },
-            ]
+
+            # TIKI PRODUCT PAGE
+            # {
+            # "url": "https://tiki.vn/p34741455.html",
+            # "request_type": "tiki_product",
+            # "platform": "tiki",
+            # "venture": "vn",
+            # "database": "eve",
+            # "schema": "DS-3_raw_data",
+            # "use_proxy": False
+            # }
+
+            # TIKI SEARCH PAGE
+            # {
+            # "url": "https://tiki.vn/api/v2/products?limit=48&q=sữa&page=1",
+            # "request_type": "tiki_search",
+            # "platform": "tiki",
+            # "venture": "vn",
+            # "database": "eve",
+            # "schema": "DS-3_raw_data",
+            # "page": 1,
+            # "keyword": "sữa",
+            # "use_proxy": False
+            # }
+
+            # TIKI CATEGORY PAGE
+            # {
+            # "url": "https://tiki.vn/do-choi-me-be/c2549?src=mega-menu?page=1",
+            # "request_type": "tiki_category",
+            # "platform": "tiki",
+            # "venture": "vn",
+            # "database": "eve",
+            # "schema": "DS-3_raw_data",
+            # "page": 1,
+            # "use_proxy": False
+            # }
+
+            # TIKI BRAND SEARCH 
+            {
+            "url": "https://tiki.vn/search?q=dutch+lady&category=8273&brand=32546&seller=1&page=1",
+            "request_type": "tiki_brand_search",
+            "platform": "tiki",
+            "venture": "vn",
+            "database": "fcv",
+            "schema": "raw_data",
+            "table": "tiki_brand_search",
+            "brand_name": "Dutch Lady",
+            "page": 1,
+            "use_proxy": False
+            }   
+
+            # TIKI BRAND PAGE
+            # {
+            # "url": "https://tiki.vn/chuong-trinh/enfa-chinh-hang",
+            # "request_type": "tiki_brand_page",
+            # "platform": "tiki",
+            # "venture": "vn",
+            # "database": "eve",
+            # "schema": "DS-3_raw_data",
+            # "page": 1,
+            # "use_proxy": False
+            # }
+
+
+            # TIKI BRAND PAGE LV2
+            # {
+            # "url": "https://tiki.vn/api/v2/landingpage/products?skus=8936036773798",
+            # "url_type": "tiki_brand_page_lv2" 
+            # }
+
+            # TIKI CATEGORY PAGE 
+            # {
+            # "url": "https://tiki.vn/do-choi-me-be/c2549",
+            # "url_type": "tiki_category",
+            # "page": 1 
+            # }
+
+            # TIKI FLASH SALE PAGE 
+            # {
+            # "url": "https://tiki.vn/api/v2/events/deals/?category_ids=2549&type=now&page=1&per_page=20",
+            # "url_type": "tiki_flash_sale",
+            # "page": 1 
+            # }
+
+
+            # TIKI CAMPAIGN
+            # {
+            # "url": "https://tiki.vn/chuong-trinh/me-san-khuyen-mai-online?src=home_v4_main_banner.s3.b41521",
+            # "url_type": "tiki_campaign"
+            # }
+]

@@ -21,6 +21,8 @@ LOG_STDOUT = False
 LOG_FORMAT = '%(asctime)s {%(filename)s:%(lineno)d} %(levelname)s %(message)s' 
 LOG_FILE = log_path
 
+# REDIRECT_ENABLED = True
+
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 Edg/86.0.622.69'
 RETRY_HTTP_CODES = [500, 503, 504, 400, 403, 408]
 RETRY_TIMES = 0
@@ -37,32 +39,32 @@ DEFAULT_REQUEST_HEADERS = {
     'Accept': '*/*',
     'Connection': 'keep-alive'
 }
-'''
-Default :
-{
-    'scrapy.downloadermiddlewares.robotstxt.RobotsTxtMiddleware': 100,
-    'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware': 300,
-    'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware': 350,
-    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': 400,
-    'scrapy.downloadermiddlewares.retry.RetryMiddleware': 500,
-    'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware': 550,
-    'scrapy.downloadermiddlewares.ajaxcrawl.AjaxCrawlMiddleware': 560,
-    'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware': 580,
-    'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 590,
-    'scrapy.downloadermiddlewares.redirect.RedirectMiddleware': 600,
-    'scrapy.downloadermiddlewares.cookies.CookiesMiddleware': 700,
-    'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 750,
-    'scrapy.downloadermiddlewares.chunked.ChunkedTransferMiddleware': 830,
-    'scrapy.downloadermiddlewares.stats.DownloaderStats': 850,
-    'scrapy.downloadermiddlewares.httpcache.HttpCacheMiddleware': 900,
-}
+# '''
+# Default :
+# {
+#     'scrapy.downloadermiddlewares.robotstxt.RobotsTxtMiddleware': 100,
+#     'scrapy.downloadermiddlewares.httpauth.HttpAuthMiddleware': 300,
+#     'scrapy.downloadermiddlewares.downloadtimeout.DownloadTimeoutMiddleware': 350,
+#     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': 400,
+#     'scrapy.downloadermiddlewares.retry.RetryMiddleware': 500,
+#     'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware': 550,
+#     'scrapy.downloadermiddlewares.ajaxcrawl.AjaxCrawlMiddleware': 560,
+#     'scrapy.downloadermiddlewares.redirect.MetaRefreshMiddleware': 580,
+#     'scrapy.downloadermiddlewares.httpcompression.HttpCompressionMiddleware': 590,
+#     'scrapy.downloadermiddlewares.redirect.RedirectMiddleware': 600,
+#     'scrapy.downloadermiddlewares.cookies.CookiesMiddleware': 700,
+#     'scrapy.downloadermiddlewares.httpproxy.HttpProxyMiddleware': 750,
+#     'scrapy.downloadermiddlewares.chunked.ChunkedTransferMiddleware': 830,
+#     'scrapy.downloadermiddlewares.stats.DownloaderStats': 850,
+#     'scrapy.downloadermiddlewares.httpcache.HttpCacheMiddleware': 900,
+# }
 
-'''
+# '''
 
 DOWNLOADER_MIDDLEWARES = {
-    'eve.middlewares.cookie.RemoveCookieMiddleware': 400,
+    'eve.middlewares.cookie.RemoveCookieMiddleware': 100,
     # 'eve.middlewares.proxy.RandomProxyMiddleware': 450,
-    'eve.middlewares.useragent.UserAgentMiddleware': 490,
+    # 'eve.middlewares.useragent.UserAgentMiddleware': 120,
 
 }
 # EXTENSIONS = {
