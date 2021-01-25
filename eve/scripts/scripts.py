@@ -23,9 +23,7 @@ def proxy_generator():
     
     return proxy
 
-
 def generate_request_arguments(request_meta, SETTING, parse_page, err_parse):
-
     meta = {}
     for key, val in request_meta.items():
         if key not in ['url', 'request_type', 'use_proxy']:

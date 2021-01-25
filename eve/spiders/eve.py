@@ -17,7 +17,7 @@ class EveSpider(scrapy.Spider):
 
     def start_requests(self):
         if hasattr(self, 'worker_manager'): # not a test case
-            # worker_manager = "http://13.212.181.246:5000/getdata?project=eve_q&num=100"
+            # worker_manager = "http://13.212.181.246:5000/getdata?project=fcv_l&num=100"
             data = requests.get(self.worker_manager)
             data = json.loads(data.text) 
             self.request_list = data.get("urls")
@@ -85,8 +85,8 @@ class EveSpider(scrapy.Spider):
         error_data['schema'] = request_meta['schema']
         yield error_data              
 
-    # def close(self, reason):  
-    #     if not self.block_flag:
-    #         pass
-            # os.remove(str(os.getcwd()) + "/../test.txt")
-            # self.logger.warning('Proxy usage: %s', self.proxy_usage)
+    def close(self, reason):  
+        # if not self.block_flag:
+        #     pass
+        #     os.remove(str(os.getcwd()) + "/../test.txt")
+        self.logger.warning('Spider finished successfully!')

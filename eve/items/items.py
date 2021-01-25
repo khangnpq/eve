@@ -15,7 +15,8 @@ class Template(scrapy.Item):
     platform = scrapy.Field()
     table = scrapy.Field()
     data = scrapy.Field()
-
+    data_key = scrapy.Field()
+    
 class Products(Template):
 
     is_cleaned = scrapy.Field()

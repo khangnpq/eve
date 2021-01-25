@@ -5,7 +5,7 @@ import sqlalchemy as sa
 from configparser import ConfigParser
 import requests
 import json
-
+import random
 class InsertToDBPipeline(object):
     def __init__(self):
         self.DB_instance = defaultdict(dict)
@@ -76,4 +76,5 @@ class DefaultValuesPipeline(object):
         item.setdefault('created_at', datetime.now())
         if hasattr(item,'data'):
             item.setdefault('is_cleaned', 0)
+            item.setdefault('data_key', '{}_{}'.format(random.randint(), datetime.now()))
         return item
