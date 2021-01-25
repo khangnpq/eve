@@ -104,15 +104,16 @@ REQUEST_LIST = [
             # },
 
             # TIKI PRODUCT PAGE
-            # {
-            # "url": "https://tiki.vn/p34741455.html",
-            # "request_type": "tiki_product",
-            # "platform": "tiki",
-            # "venture": "vn",
-            # "database": "eve",
-            # "schema": "DS-3_raw_data",
-            # "use_proxy": False
-            # }
+            {
+            "url": "https://tiki.vn/thung-48-hop-sua-tuoi-tiet-trung-dutch-lady-co-gai-ha-lan-co-duong-48x180ml-p2454283.html?spid=2599793&src=ss-organic",
+            "request_type": "tiki_product",
+            "platform": "tiki",
+            "venture": "vn",
+            "database": "fcv",
+            "schema": "raw_data",
+            "table": "tiki_product_info_v1",
+            "use_proxy": False
+            },
 
             # TIKI SEARCH PAGE
             # {
@@ -140,18 +141,18 @@ REQUEST_LIST = [
             # }
 
             # TIKI BRAND SEARCH 
-            {
-            "url": "https://tiki.vn/search?q=dutch+lady&category=8273&brand=32546&seller=1&page=1",
-            "request_type": "tiki_brand_search",
-            "platform": "tiki",
-            "venture": "vn",
-            "database": "fcv",
-            "schema": "raw_data",
-            "table": "tiki_brand_search",
-            "brand_name": "Dutch Lady",
-            "page": 1,
-            "use_proxy": False
-            }   
+            # {
+            # "url": "https://tiki.vn/search?q=dutch+lady&category=8273&brand=32546&seller=1&page=1",
+            # "request_type": "tiki_brand_search",
+            # "platform": "tiki",
+            # "venture": "vn",
+            # "database": "fcv",
+            # "schema": "raw_data",
+            # "table": "tiki_brand_search",
+            # "brand_name": "Dutch Lady",
+            # "page": 1,
+            # "use_proxy": False
+            # }   
 
             # TIKI BRAND PAGE
             # {

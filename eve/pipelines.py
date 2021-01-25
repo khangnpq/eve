@@ -35,6 +35,7 @@ class InsertToDBPipeline(object):
         table = item['table']
         column_list = self.__generate_DB_instance(database, schema, table)
         info = getattr(item, 'handleInsert')(item, column_list)
+        # print(info)
         self.data[database][table].append(info)
 
     def close_spider(self, spider):
@@ -74,7 +75,8 @@ class DefaultValuesPipeline(object):
 
     def process_item(self, item, spider):
         item.setdefault('created_at', datetime.now())
-        if hasattr(item,'data'):
+        if item.get('data'):
             item.setdefault('is_cleaned', 0)
-            item.setdefault('data_key', '{}_{}'.format(random.randint(), datetime.now()))
+            item.setdefault('data_key', '{}_{}'.format(random.randint(1,1000), datetime.now()))
+        print(item.keys())
         return item
