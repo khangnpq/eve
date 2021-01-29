@@ -40,12 +40,23 @@ class InsertToDBPipeline(object):
 
     def close_spider(self, spider):
         cleaner = []
+        
         for database, engine_table in self.DB_instance.items():
             engine = engine_table['engine']
             for table, info_list in self.data[database].items():
                 table_obj = engine_table[table]
                 q_time = len(info_list) // 100
                 q_copy = q_time
+                # task manager add clean raw data task
+                cleaner.append(
+                                {
+                                'database': database,
+                                'schema': table_obj.schema,
+                                'table': table
+                                }
+                              )
+                json_dict = {"urls": cleaner}
+                requests.post("http://13.212.181.246:5000/submitdata?project=eve_q", data = json.dumps(json_dict))
                 with engine.connect() as conn:
                     while q_time > 0:
                         conn.execute(
@@ -58,18 +69,8 @@ class InsertToDBPipeline(object):
                                      table_obj.insert(),
                                      info_list
                                     )
-                # task manager add clean raw data task
-                cleaner.append(
-                                {
-                                'database': database,
-                                'schema': table_obj.schema,
-                                'table': table
-                                }
-                              )
-            engine.dispose()
-        # send clean task
-        json_dict = {"urls": cleaner}
-        requests.post("http://13.212.181.246:5000/submitdata?project=eve_q", data = json.dumps(json_dict))
+                
+            engine.dispose()        
 
 class DefaultValuesPipeline(object):
 
