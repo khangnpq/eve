@@ -67,3 +67,4 @@ credentials.ini
 dbs
 settings_dev.py
 setup.py
+scrapydweb_settings_v10.py
