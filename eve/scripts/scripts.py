@@ -26,31 +26,32 @@ def proxy_generator():
 def generate_request_arguments(request_meta, SETTING, parse_page, err_parse):
     meta = {}
     for key, val in request_meta.items():
-        if key not in ['url', 'request_type', 'use_proxy']:
+        if key not in ['url', 'request_type', 'use_proxy', 'keep_url']:
             meta[key] = val
         elif key == 'url':
             request_url = val
             referer_url = re.findall('((?:http)[?:\.\w*]+(?:\/{2})\w*[?:\.\w*]+\/)', request_url)[0]
+            meta[key] = val
         elif key == 'use_proxy':
             if val:
                 meta['proxy'] = proxy_generator()
         else:
             request_type = val
             worker_type = request_type[request_type.find('_') + 1:]
-    request_setting = SETTING[meta['platform']]
-    worker_setting = request_setting[worker_type]
-    body = json.dumps(worker_setting.get('payload', '')) # Query-based payload
+    # request_setting = SETTING[meta['platform']]
+    # worker_setting = request_setting[worker_type]
+    # body = json.dumps(worker_setting.get('payload', '')) # Query-based payload
     request = {
                'url': request_url,               
                'callback': parse_page,                 
-               'method': worker_setting.get('method', 'GET'),  
+            #    'method': worker_setting.get('method', 'GET'),  
                'headers': {"referer": referer_url},        
                'meta': meta,                                                
                'dont_filter': True,                      
                'errback': err_parse
               }  
-    if len(body) > 10:
-        request['body'] = body
+    # if len(body) > 10:
+    #     request['body'] = body
     return request
 
 def generate_item_class(name, field_list, template=Products):

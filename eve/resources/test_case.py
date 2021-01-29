@@ -112,10 +112,35 @@ REQUEST_LIST = [
             "database": "fcv",
             "schema": "raw_data",
             "table": "tiki_product_info_v1",
-            "use_proxy": False
+            "use_proxy": False,
+            "keep_url": True
             },
 
-            # TIKI SEARCH PAGE
+            # TIKI PRODUCT REVIEWS
+            # {
+            # "url": "https://tiki.vn/api/v2/reviews?product_id=2454283&sort=bought&page=1&limit=10&include=comments",
+            # "request_type": "tiki_product_review",
+            # "platform": "tiki",
+            # "venture": "vn",
+            # "database": "fcv",
+            # "schema": "raw_data",
+            # "table": "tiki_product_review",
+            # "use_proxy": False,
+            # },
+
+            # TIKI PRODUCT COUPONS
+            # {
+            # "url": "https://api.tiki.vn/shopping/v2/promotion/rules?pid=2599793&seller_id=1",
+            # "request_type": "tiki_product_coupon",
+            # "platform": "tiki",
+            # "venture": "vn",
+            # "database": "fcv",
+            # "schema": "raw_data",
+            # "table": "tiki_product_coupon",
+            # "use_proxy": False,
+            # },
+
+            # TIKI SEARCH
             # {
             # "url": "https://tiki.vn/api/v2/products?limit=48&q=sữa&page=1",
             # "request_type": "tiki_search",
@@ -128,7 +153,7 @@ REQUEST_LIST = [
             # "use_proxy": False
             # }
 
-            # TIKI CATEGORY PAGE
+            # TIKI CATEGORY
             # {
             # "url": "https://tiki.vn/do-choi-me-be/c2549?src=mega-menu?page=1",
             # "request_type": "tiki_category",
@@ -166,27 +191,18 @@ REQUEST_LIST = [
             # "use_proxy": False
             # }
 
-
             # TIKI BRAND PAGE LV2
             # {
             # "url": "https://tiki.vn/api/v2/landingpage/products?skus=8936036773798",
             # "url_type": "tiki_brand_page_lv2" 
             # }
 
-            # TIKI CATEGORY PAGE 
+            # TIKI FLASH SALE 
             # {
-            # "url": "https://tiki.vn/do-choi-me-be/c2549",
-            # "url_type": "tiki_category",
-            # "page": 1 
-            # }
-
-            # TIKI FLASH SALE PAGE 
-            # {
-            # "url": "https://tiki.vn/api/v2/events/deals/?category_ids=2549&type=now&page=1&per_page=20",
+            # "url": "https://tiki.vn/api/v2/widget/deals/mix?type=now&page=1&per_page=20",
             # "url_type": "tiki_flash_sale",
             # "page": 1 
             # }
-
 
             # TIKI CAMPAIGN
             # {

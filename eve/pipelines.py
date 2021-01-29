@@ -78,5 +78,4 @@ class DefaultValuesPipeline(object):
         if item.get('data'):
             item.setdefault('is_cleaned', 0)
             item.setdefault('data_key', '{}_{}'.format(random.randint(1,1000), datetime.now()))
-        print(item.keys())
         return item
